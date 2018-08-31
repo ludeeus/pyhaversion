@@ -1,15 +1,35 @@
 language: python
 install: pip install pycodestyle homeassistant
+
+stages:
+  - test
+  - run
+  - deploy
+
 jobs:
   include:
+#Linting test
     - stage: test
       name: "Linting with pycodestyle"
       python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
+
+# Test install the module
     - stage: test
       name: "Setup test"
       python: "3.6"
       script: python setup.py test
+
+# Run functions
+    - stage: run
+      name: "Run - get_version_number('hassio', 'beta', 'tinker') "
+      python: "3.6"
+      script:
+        - python setup.py
+        - python -m HAVersion().get_version_number('hassio', 'beta', 'tinker')
+
+
+# Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy
       provider: pypi
       user: "$PYPIUSER"

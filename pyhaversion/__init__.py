@@ -5,44 +5,47 @@ file for more details.
 """
 import requests
 
+
 class HAVersion:
-    """This class is used to get the newest version number of Home Assistant."""
+    """This class is for this module"""
 
     def __init__(self):
         """Initialize"""
 
     def get_version_number(self, source, branch, image='default'):
-        """This method gets the version number based on defined source and branch"""
+        """This method gets the version number based on args"""
         if source == 'pip':
             if branch == 'beta':
                 version = get_pip_beta()
             elif branch == 'stable':
                 version = get_pip_stable()
             else:
-                print('The defined branch is not valid: ' +  branch)
+                print('The defined branch is not valid: ' + branch)
         elif source == 'docker':
             if branch == 'beta':
                 version = get_docker_beta()
             elif branch == 'stable':
                 version = get_docker_stable()
             else:
-                print('The defined branch is not valid: ' +  branch)
+                print('The defined branch is not valid: ' + branch)
         elif source == 'hassio':
             if branch == 'beta':
                 version = get_hassio_beta(image)
             elif branch == 'stable':
                 version = get_hassio_stable(image)
             else:
-                print('The defined branch is not valid: ' +  branch)
+                print('The defined branch is not valid: ' + branch)
         else:
             print('The defined source is not valid: ' + source)
         return version
+
 
 def get_pip_stable():
     """pip stable"""
     base_url = 'https://pypi.org/pypi/homeassistant/json'
     version = requests.get(base_url, timeout=5).json()['info']['version']
-    return version
+    return {'ha': version
+
 
 def get_pip_beta():
     """pip beta"""
@@ -62,6 +65,7 @@ def get_pip_beta():
             version = name
     return version
 
+
 def get_docker_stable():
     """docker Stable"""
     base = 'https://registry.hub.docker.com/v1/repositories/'
@@ -77,6 +81,7 @@ def get_docker_stable():
             controll = 1
             version = name
     return version
+
 
 def get_docker_beta():
     """docker beta"""
@@ -94,11 +99,13 @@ def get_docker_beta():
             version = name
     return version
 
+
 def get_hassio_stable(image='default'):
     """hassio Stable"""
     base_url = 'https://s3.amazonaws.com/hassio-version/stable.json'
     version = requests.get(base_url, timeout=5).json()['homeassistant'][image]
     return version
+
 
 def get_hassio_beta(image='default'):
     """hassio beta"""
