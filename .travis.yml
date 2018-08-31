@@ -36,11 +36,11 @@ jobs:
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('docker', 'beta'))"
         # Seperate functions
         - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
-        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
-        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
-        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
-        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
-        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_beta())"
+        - python -c"import pyhaversion; print(pyhaversion.get_hassio_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_hassio_beta())"
+        - python -c"import pyhaversion; print(pyhaversion.get_docker_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_docker_beta())"
 
 
 
