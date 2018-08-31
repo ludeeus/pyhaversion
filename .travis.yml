@@ -1,6 +1,4 @@
 language: python
-install: pip install pycodestyle
-
 stages:
   - test
   - run
@@ -10,32 +8,36 @@ jobs:
   include:
 #Linting test
     - stage: test
+      install: pip install pycodestyle
       name: "Linting with pycodestyle"
       python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
 
 # Test install the module
     - stage: test
+      install: pip install -U pip setuptools wheel
       name: "Setup test"
       python: "3.6"
       script: python setup.py test
 
 # Run functions
     - stage: run
+      install: pip install -U pip setuptools wheel
       name: "Run the module funtions"
       python: "3.6"
       script:
-        - python setup.py
-        - python -m pyhaversion.get_version_number('pip', 'stable')
-        - python -m pyhaversion.get_version_number('pip', 'beta')
-        - python -m pyhaversion.get_version_number('hassio', 'stable')
-        - python -m pyhaversion.get_version_number('hassio', 'beta')
-        - python -m pyhaversion.get_version_number('docker', 'stable')
-        - python -m pyhaversion.get_version_number('docker', 'beta')
+        - python setup.py install
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('pip', 'stable'))"
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('pip', 'beta'))"
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('hassio', 'stable'))"
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('hassio', 'beta'))"
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('docker', 'stable'))"
+        - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('docker', 'beta'))"
 
 
 # Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy
+      install: pip install -U pip setuptools wheel
       provider: pypi
       user: "$PYPIUSER"
       password: "$PYPIKEY"
