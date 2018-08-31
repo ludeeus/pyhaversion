@@ -1,4 +1,4 @@
-# pyhaversion
+# pyhaversion [![Build Status](https://travis-ci.com/ludeeus/pyhaversion.svg?branch=master)](https://travis-ci.com/ludeeus/pyhaversion)
 
 _A python module to the newest version number of Home Assistant._
 
