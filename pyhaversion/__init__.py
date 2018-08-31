@@ -97,7 +97,7 @@ def get_docker_beta():
         else:
             controll = 1
             version = name
-    return vers{'ha': version}ion
+    return {'ha': version}
 
 
 def get_hassio_stable(image='default'):
@@ -114,6 +114,5 @@ def get_hassio_beta(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
-    
     return {'ha': version, 'supervisor': suversion,
             'hassos-cli': cliversion}
