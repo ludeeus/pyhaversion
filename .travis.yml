@@ -38,6 +38,7 @@ jobs:
 # Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy
       install: pip install -U pip setuptools wheel
+      script: skip 
       provider: pypi
       user: "$PYPIUSER"
       password: "$PYPIKEY"
