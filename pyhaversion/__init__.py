@@ -44,7 +44,7 @@ def get_pip_stable():
     """pip stable"""
     base_url = 'https://pypi.org/pypi/homeassistant/json'
     version = requests.get(base_url, timeout=5).json()['info']['version']
-    return {'ha': version}
+    return {'homeassistant': version}
 
 
 def get_pip_beta():
@@ -63,7 +63,7 @@ def get_pip_beta():
         else:
             controll = 1
             version = name
-    return {'ha': version}
+    return {'homeassistant': version}
 
 
 def get_docker_stable():
@@ -80,7 +80,7 @@ def get_docker_stable():
         else:
             controll = 1
             version = name
-    return {'ha': version}
+    return {'homeassistant': version}
 
 
 def get_docker_beta():
@@ -97,7 +97,7 @@ def get_docker_beta():
         else:
             controll = 1
             version = name
-    return {'ha': version}
+    return {'homeassistant': version}
 
 
 def get_hassio_stable(image='default'):
@@ -108,7 +108,7 @@ def get_hassio_stable(image='default'):
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
     hassos = data['hassos']
-    return {'ha': haversion, 'supervisor': suversion,
+    return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}
 
 
@@ -120,5 +120,5 @@ def get_hassio_beta(image='default'):
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
     hassos = data['hassos']
-    return {'ha': haversion, 'supervisor': suversion,
+    return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}

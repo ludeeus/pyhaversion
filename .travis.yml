@@ -27,12 +27,21 @@ jobs:
       python: "3.6"
       script:
         - python setup.py install
+        # Class functions
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('pip', 'stable'))"
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('pip', 'beta'))"
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('hassio', 'stable'))"
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('hassio', 'beta'))"
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('docker', 'stable'))"
         - python -c"from pyhaversion import HAVersion; print(HAVersion().get_version_number('docker', 'beta'))"
+        # Seperate functions
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+        - python -c"import pyhaversion; print(pyhaversion.get_pip_stable())"
+
 
 
 # Deploy to PyPi if all tests pass and change was done on master.

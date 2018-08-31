@@ -21,7 +21,7 @@ ha_version = HAVersion()
 result = ha_version.get_version_number(source, branch, image)
 
 #Print results:
-print('HA version: ' + result['ha'])
+print('HA version: ' + result['homeassistant'])
 ```
 
 ## Valid options for source
