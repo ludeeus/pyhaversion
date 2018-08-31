@@ -1,5 +1,5 @@
 language: python
-install: pip install pycodestyle homeassistant
+install: pip install pycodestyle
 
 stages:
   - test

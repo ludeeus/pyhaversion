@@ -59,7 +59,7 @@ def get_pip_beta():
     while controll < 1:
         name = all_versions[num]
         if '.8.' in name or '.9.' in name:
-            num = num +1
+            num = num + 1
         else:
             controll = 1
             version = name
@@ -76,7 +76,7 @@ def get_docker_stable():
     while controll < 1:
         name = get_version[num]['name']
         if 'b' in name or 'd' in name or 'r' in name:
-            num = num -1
+            num = num - 1
         else:
             controll = 1
             version = name
@@ -93,7 +93,7 @@ def get_docker_beta():
     while controll < 1:
         name = get_version[num]['name']
         if 'd' in name or 'r' in name:
-            num = num -1
+            num = num - 1
         else:
             controll = 1
             version = name
