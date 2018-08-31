@@ -107,9 +107,9 @@ def get_hassio_stable(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
+    hassos = data['hassos']
     return {'ha': haversion, 'supervisor': suversion,
-            'hassos-cli': cliversion}
-
+            'hassos-cli': cliversion, 'hassos': hassos}
 
 
 def get_hassio_beta(image='default'):
@@ -119,5 +119,6 @@ def get_hassio_beta(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
+    hassos = data['hassos']
     return {'ha': haversion, 'supervisor': suversion,
-            'hassos-cli': cliversion}
+            'hassos-cli': cliversion, 'hassos': hassos}
