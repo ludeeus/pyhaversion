@@ -9,7 +9,7 @@ jobs:
 #Linting test
     - stage: test
       install: pip install pycodestyle
-      name: "Linting with pycodestyle"
+      name: "Linting with pycodestyle (PEP-8)"
       python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
 

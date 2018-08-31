@@ -63,7 +63,7 @@ def get_pip_beta():
         else:
             controll = 1
             version = name
-    return version
+    return {'ha': version}
 
 
 def get_docker_stable():
@@ -80,7 +80,7 @@ def get_docker_stable():
         else:
             controll = 1
             version = name
-    return version
+    return {'ha': version}
 
 
 def get_docker_beta():
@@ -97,18 +97,23 @@ def get_docker_beta():
         else:
             controll = 1
             version = name
-    return version
+    return vers{'ha': version}ion
 
 
 def get_hassio_stable(image='default'):
     """hassio Stable"""
     base_url = 'https://s3.amazonaws.com/hassio-version/stable.json'
-    version = requests.get(base_url, timeout=5).json()['homeassistant'][image]
-    return version
+    data = requests.get(base_url, timeout=5).json()
+    return {'ha': version}
 
 
 def get_hassio_beta(image='default'):
     """hassio beta"""
     base_url = 'https://s3.amazonaws.com/hassio-version/beta.json'
-    version = requests.get(base_url, timeout=5).json()['homeassistant'][image]
-    return version
+    data = requests.get(base_url, timeout=5).json()
+    haversion = data['homeassistant'][image]
+    suversion = data['supervisor']
+    cliversion = data['hassos-cli']
+    
+    return {'ha': version, 'supervisor': suversion,
+            'hassos-cli': cliversion}
