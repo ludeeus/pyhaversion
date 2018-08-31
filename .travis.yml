@@ -1,0 +1,18 @@
+language: python
+install: pip install pycodestyle homeassistant
+jobs:
+  include:
+    - stage: test
+      name: "Linting with pycodestyle"
+      python: "3.6"
+      script: find . -name \*.py -exec pycodestyle {} +
+    - stage: test
+      name: "Setup test"
+      python: "3.6"
+      script: python setup.py test
+    - stage: deploy
+      provider: pypi
+      user: "$PYPIUSER"
+      password: "$PYPIKEY"
+      on:
+        branch: master
