@@ -26,8 +26,8 @@ jobs:
       python: "3.6"
       script:
         - python setup.py
-        - python -m pyhaversion.get_version_number('venv', 'stable')
-        - python -m pyhaversion.get_version_number('venv', 'beta')
+        - python -m pyhaversion.get_version_number('pip', 'stable')
+        - python -m pyhaversion.get_version_number('pip', 'beta')
         - python -m pyhaversion.get_version_number('hassio', 'stable')
         - python -m pyhaversion.get_version_number('hassio', 'beta')
         - python -m pyhaversion.get_version_number('docker', 'stable')
