@@ -104,7 +104,12 @@ def get_hassio_stable(image='default'):
     """hassio Stable"""
     base_url = 'https://s3.amazonaws.com/hassio-version/stable.json'
     data = requests.get(base_url, timeout=5).json()
-    return {'ha': version}
+    haversion = data['homeassistant'][image]
+    suversion = data['supervisor']
+    cliversion = data['hassos-cli']
+    return {'ha': haversion, 'supervisor': suversion,
+            'hassos-cli': cliversion}
+
 
 
 def get_hassio_beta(image='default'):
@@ -114,5 +119,5 @@ def get_hassio_beta(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
-    return {'ha': version, 'supervisor': suversion,
+    return {'ha': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion}
