@@ -44,7 +44,7 @@ def get_pip_stable():
     """pip stable"""
     base_url = 'https://pypi.org/pypi/homeassistant/json'
     version = requests.get(base_url, timeout=5).json()['info']['version']
-    return {'ha': version
+    return {'ha': version}
 
 
 def get_pip_beta():

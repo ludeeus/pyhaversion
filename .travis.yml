@@ -22,11 +22,16 @@ jobs:
 
 # Run functions
     - stage: run
-      name: "Run - get_version_number('hassio', 'beta', 'tinker') "
+      name: "Run the module funtions"
       python: "3.6"
       script:
         - python setup.py
-        - python -m pyhaversion.get_version_number('hassio', 'beta', 'tinker')
+        - python -m pyhaversion.get_version_number('venv', 'stable')
+        - python -m pyhaversion.get_version_number('venv', 'beta')
+        - python -m pyhaversion.get_version_number('hassio', 'stable')
+        - python -m pyhaversion.get_version_number('hassio', 'beta')
+        - python -m pyhaversion.get_version_number('docker', 'stable')
+        - python -m pyhaversion.get_version_number('docker', 'beta')
 
 
 # Deploy to PyPi if all tests pass and change was done on master.
