@@ -1,29 +1,57 @@
 language: python
 stages:
-  - test
+  - install
+  - linting
   - run
   - deploy
 
 jobs:
   include:
-#Linting test
-    - stage: test
+    #Linting
+    - stage: linting
       install: pip install pycodestyle
       name: "Linting with pycodestyle (PEP-8)"
       python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
+    - stage: linting
+      install: pip install pydocstyle
+      name: "Linting with pydocstyle"
+      python: "3.6"
+      script: find . -name \*.py -exec pydocstyle {} +
+    - stage: linting
+      install: pip install pylint
+      name: "Linting with pylint"
+      python: "3.6"
+      script: find . -name \*.py -exec pylint {} +
+    - stage: linting
+      install: pip install pyflakes
+      name: "Linting with pyflakes"
+      python: "3.6"
+      script: find . -name \*.py -exec pyflakes {} +
+    - stage: linting
+      install: pip install pyflakes
+      name: "Linting with pyflakes"
+      python: "3.6"
+      script: find . -name \*.py -exec pyflakes {} +
+    - stage: linting
+      install: pip install flake8
+      name: "Linting with flake8"
+      python: "3.6"
+      script: find . -name \*.py -exec flake8 {} +
 
-# Test install the module
-    - stage: test
+
+    # Test install the module
+    - stage: install
       install: pip install -U pip setuptools wheel
       name: "Setup test"
       python: "3.6"
       script: python setup.py test
 
-# Run functions
+
+    # Run functions
     - stage: run
       install: pip install -U pip setuptools wheel
-      name: "Run the module funtions"
+      name: "Run"
       python: "3.6"
       script:
         - python setup.py install
@@ -43,9 +71,9 @@ jobs:
         - python -c"import pyhaversion; print(pyhaversion.get_docker_beta())"
 
 
-
-# Deploy to PyPi if all tests pass and change was done on master.
+    # Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy
+      name: "Deploy to PyPi"
       install: pip install -U pip setuptools wheel
       script: skip
       deploy: &pypi
