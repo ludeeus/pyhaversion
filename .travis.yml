@@ -1,7 +1,7 @@
 language: python
 stages:
-  - install
   - linting
+  - install
   - run
   - deploy
 
