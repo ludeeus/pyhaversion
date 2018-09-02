@@ -6,39 +6,32 @@ file for more details.
 """
 import requests
 
-
-class HAVersion:
-    """This class is for this module"""
-
-    def __init__(self):
-        """Initialize"""
-
-    def get_version_number(self, source, branch, image='default'):
-        """This method gets the version number based on args."""
-        if source == 'pip':
-            if branch == 'beta':
-                version = get_pip_beta()
-            elif branch == 'stable':
-                version = get_pip_stable()
-            else:
-                print('The defined branch is not valid: ' + branch)
-        elif source == 'docker':
-            if branch == 'beta':
-                version = get_docker_beta()
-            elif branch == 'stable':
-                version = get_docker_stable()
-            else:
-                print('The defined branch is not valid: ' + branch)
-        elif source == 'hassio':
-            if branch == 'beta':
-                version = get_hassio_beta(image)
-            elif branch == 'stable':
-                version = get_hassio_stable(image)
-            else:
-                print('The defined branch is not valid: ' + branch)
+def get_version_number(source, branch, image='default'):
+    """This method gets the version number based on args."""
+    if source == 'pip':
+        if branch == 'beta':
+            version = get_pip_beta()
+        elif branch == 'stable':
+            version = get_pip_stable()
         else:
-            print('The defined source is not valid: ' + source)
-        return version
+            print('The defined branch is not valid: ' + branch)
+    elif source == 'docker':
+        if branch == 'beta':
+            version = get_docker_beta()
+        elif branch == 'stable':
+            version = get_docker_stable()
+        else:
+            print('The defined branch is not valid: ' + branch)
+    elif source == 'hassio':
+        if branch == 'beta':
+            version = get_hassio_beta(image)
+        elif branch == 'stable':
+            version = get_hassio_stable(image)
+        else:
+            print('The defined branch is not valid: ' + branch)
+    else:
+        print('The defined source is not valid: ' + source)
+    return version
 
 
 def get_pip_stable():
@@ -123,3 +116,12 @@ def get_hassio_beta(image='default'):
     hassos = data['hassos']
     return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}
+
+def run_test():
+    """Run tests"""
+    sources=['pip','docker','hassio']
+    branches=['stable', 'beta']
+    for source in sources:
+        for branch in branches:
+            print('Running test for' + source + ' - ' + branch)
+            get_version_number(source, branch, image='default')
