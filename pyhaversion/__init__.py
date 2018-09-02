@@ -117,10 +117,19 @@ def run_test():
     """Run tests."""
     sources = ['pip', 'docker', 'hassio']
     branches = ['stable', 'beta']
+    images = ['', '', '', '', '', '', '', '', '', '', '']
     for source in sources:
         for branch in branches:
-            version = get_version_number(source, branch, image='default')
-            print(source + ' - ' + branch + ': ' + str(version))
+            if source == 'hassio':
+                for image in images:
+                    version = get_version_number(source, branch, image)
+                    print(source + ' - ' +
+                          image + ' - ' +
+                          branch + ': ' +
+                          str(version))
+            else:
+                version = get_version_number(source, branch)
+                print(source + ' - ' + branch + ': ' + str(version))
 
 
 def get_board(image):

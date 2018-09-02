@@ -11,14 +11,13 @@ pip install pyhaversion
 ## Example usage
 
 ```python
-from pyhaversion import HAVersion
+import pyhaversion
 
 source = 'pip'
 branch = 'stable'
-image = 'default'
+image = 'default' # Optional (Only used for Hassio)
 
-ha_version = HAVersion()
-result = ha_version.get_version_number(source, branch, image)
+result = pyhaversion.get_version_number(source, branch, image)
 
 #Print results:
 print('HA version: ' + result['homeassistant'])
