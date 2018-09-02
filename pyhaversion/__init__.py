@@ -120,7 +120,7 @@ def run_test():
     for source in sources:
         for branch in branches:
             version = get_version_number(source, branch, image='default')
-            print(source + ' - ' + branch + ': ' + version)
+            print(source + ' - ' + branch + ': ' + str(version))
 
 
 def get_board(image):
