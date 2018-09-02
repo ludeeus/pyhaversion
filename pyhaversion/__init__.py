@@ -6,8 +6,9 @@ file for more details.
 """
 import requests
 
+
 def get_version_number(source, branch, image='default'):
-    """This method gets the version number based on args."""
+    """Returns the version number based on args."""
     if source == 'pip':
         if branch == 'beta':
             version = get_pip_beta()
@@ -117,10 +118,11 @@ def get_hassio_beta(image='default'):
     return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}
 
+
 def run_test():
     """Run tests"""
-    sources=['pip','docker','hassio']
-    branches=['stable', 'beta']
+    sources = ['pip', 'docker', 'hassio']
+    branches = ['stable', 'beta']
     for source in sources:
         for branch in branches:
             print('Running test for' + source + ' - ' + branch)
