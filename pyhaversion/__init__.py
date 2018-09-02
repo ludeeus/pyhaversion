@@ -117,5 +117,4 @@ def run_test():
     branches = ['stable', 'beta']
     for source in sources:
         for branch in branches:
-            print('Running test for' + source + ' - ' + branch)
-            get_version_number(source, branch, image='default')
+            print (get_version_number(source, branch, image='default'))
