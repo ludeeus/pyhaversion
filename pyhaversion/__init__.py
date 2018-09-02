@@ -106,7 +106,8 @@ def get_hassio_beta(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
-    hassos = data['hassos']
+    board = get_board(image)
+    hassos = data['hassos'][board]
     return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}
 
@@ -119,3 +120,22 @@ def run_test():
         for branch in branches:
             version = get_version_number(source, branch, image='default')
             print(version)
+
+
+def get_board(image):
+    """Return board for hassio."""
+    boards = {
+        "default": "ova",
+        "raspberrypi": "rpi",
+        "raspberrypi2": "rpi2",
+        "raspberrypi3": "rpi3",
+        "raspberrypi3-64": "rpi3-64",
+        "tinker": "tinker",
+        "odroid-c2": "odroid-c2",
+        "odroid-xu": "odroid-c2"
+    }
+    if image not in str(boards):
+        ret_val = boards['default']
+    else:
+        ret_val = boards[image]
+    return ret_val
