@@ -13,27 +13,27 @@ jobs:
     - stage: linting
       install: pip install pycodestyle
       name: "Linting with pycodestyle (PEP-8)"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
     - stage: linting
       install: pip install pydocstyle
       name: "Linting with pydocstyle"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: find . -name \*.py -exec pydocstyle {} +
     - stage: linting
       install: pip install pylint
       name: "Linting with pylint"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: find . -name \*.py -exec pylint --disable=F0401 {} +
     - stage: linting
       install: pip install pyflakes
       name: "Linting with pyflakes"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: find . -name \*.py -exec pyflakes {} +
     - stage: linting
       install: pip install flake8
       name: "Linting with flake8"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: find . -name \*.py -exec flake8 {} +
 
 
@@ -41,7 +41,7 @@ jobs:
     - stage: install
       install: pip install -U pip setuptools wheel
       name: "Setup test"
-      python: "$PYTHONVERSION"
+      python: "3.6"
       script: python setup.py test
 
 
@@ -49,7 +49,14 @@ jobs:
     - stage: run
       install: pip install -U pip setuptools wheel
       name: "Run"
-      python: "$PYTHONVERSION"
+      python:
+        - "2.7"
+        - "3.4"
+        - "3.5"
+        - "3.6"
+        - "3.6-dev"
+        - "3.7"
+        - "3.7-dev"
       script:
         - python setup.py install
         - python -c"import pyhaversion; print(pyhaversion.run_test())"
