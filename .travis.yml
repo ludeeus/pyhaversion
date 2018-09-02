@@ -1,4 +1,6 @@
 language: python
+env:
+  - PYTHONVERSION='3.6'
 stages:
   - linting
   - install
@@ -11,32 +13,27 @@ jobs:
     - stage: linting
       install: pip install pycodestyle
       name: "Linting with pycodestyle (PEP-8)"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: find . -name \*.py -exec pycodestyle {} +
     - stage: linting
       install: pip install pydocstyle
       name: "Linting with pydocstyle"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: find . -name \*.py -exec pydocstyle {} +
     - stage: linting
       install: pip install pylint
       name: "Linting with pylint"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: find . -name \*.py -exec pylint --disable=F0401 {} +
     - stage: linting
       install: pip install pyflakes
       name: "Linting with pyflakes"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: find . -name \*.py -exec pyflakes {} +
-    - stage: linting
-      install: pip install pytest
-      name: "Linting with pytest"
-      python: "3.6"
-      script: find . -name \*.py -exec pytest {} +
     - stage: linting
       install: pip install flake8
       name: "Linting with flake8"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: find . -name \*.py -exec flake8 {} +
 
 
@@ -44,7 +41,7 @@ jobs:
     - stage: install
       install: pip install -U pip setuptools wheel
       name: "Setup test"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script: python setup.py test
 
 
@@ -52,11 +49,10 @@ jobs:
     - stage: run
       install: pip install -U pip setuptools wheel
       name: "Run"
-      python: "3.6"
+      python: "$PYTHONVERSION"
       script:
         - python setup.py install
         - python -c"import pyhaversion; print(pyhaversion.run_test())"
-
 
 
     # Deploy to PyPi if all tests pass and change was done on master.
