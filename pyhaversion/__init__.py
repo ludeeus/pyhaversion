@@ -94,7 +94,8 @@ def get_hassio_stable(image='default'):
     haversion = data['homeassistant'][image]
     suversion = data['supervisor']
     cliversion = data['hassos-cli']
-    hassos = data['hassos']
+    board = get_board(image)
+    hassos = data['hassos'][board]
     return {'homeassistant': haversion, 'supervisor': suversion,
             'hassos-cli': cliversion, 'hassos': hassos}
 
@@ -119,7 +120,7 @@ def run_test():
     for source in sources:
         for branch in branches:
             version = get_version_number(source, branch, image='default')
-            print(version)
+            print(source + ' - ' + branch + ': ' + version)
 
 
 def get_board(image):
