@@ -1,5 +1,6 @@
 """
 A python module to the newest version number of Home Assistant.
+
 This code is released under the terms of the MIT license. See the LICENSE
 file for more details.
 """
@@ -13,7 +14,7 @@ class HAVersion:
         """Initialize"""
 
     def get_version_number(self, source, branch, image='default'):
-        """This method gets the version number based on args"""
+        """This method gets the version number based on args."""
         if source == 'pip':
             if branch == 'beta':
                 version = get_pip_beta()
@@ -41,14 +42,14 @@ class HAVersion:
 
 
 def get_pip_stable():
-    """pip stable"""
+    """Pip stable."""
     base_url = 'https://pypi.org/pypi/homeassistant/json'
     version = requests.get(base_url, timeout=5).json()['info']['version']
     return {'homeassistant': version}
 
 
 def get_pip_beta():
-    """pip beta"""
+    """Pip beta."""
     base_url = 'https://pypi.org/pypi/homeassistant/json'
     get_version = requests.get(base_url, timeout=5).json()['releases']
     all_versions = []
@@ -67,7 +68,7 @@ def get_pip_beta():
 
 
 def get_docker_stable():
-    """docker Stable"""
+    """Docker stable."""
     base = 'https://registry.hub.docker.com/v1/repositories/'
     url = base + 'homeassistant/home-assistant/tags'
     get_version = requests.get(url, timeout=5).json()
@@ -84,7 +85,7 @@ def get_docker_stable():
 
 
 def get_docker_beta():
-    """docker beta"""
+    """Docker beta."""
     base = 'https://registry.hub.docker.com/v1/repositories/'
     url = base + 'homeassistant/home-assistant/tags'
     get_version = requests.get(url, timeout=5).json()
@@ -101,7 +102,7 @@ def get_docker_beta():
 
 
 def get_hassio_stable(image='default'):
-    """hassio Stable"""
+    """Hassio stable."""
     base_url = 'https://s3.amazonaws.com/hassio-version/stable.json'
     data = requests.get(base_url, timeout=5).json()
     haversion = data['homeassistant'][image]
@@ -113,7 +114,7 @@ def get_hassio_stable(image='default'):
 
 
 def get_hassio_beta(image='default'):
-    """hassio beta"""
+    """Hassio beta."""
     base_url = 'https://s3.amazonaws.com/hassio-version/beta.json'
     data = requests.get(base_url, timeout=5).json()
     haversion = data['homeassistant'][image]

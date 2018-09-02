@@ -1,6 +1,4 @@
-"""
-Setup configuration
-"""
+"""Setup configuration."""
 import setuptools
 with open("README.md", "r") as fh:
     LONG = fh.read()
