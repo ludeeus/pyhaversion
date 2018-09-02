@@ -10,7 +10,7 @@ jobs:
     #Linting
     - stage: linting
       install: pip install pycodestyle
-      name: "Linting with pycodestyle (PEP-8)"
+      name: "Linting with pycodestyle"
       python: "3.6"
       script: find . -name \*.py -exec pycodestyle {} +
     - stage: linting
