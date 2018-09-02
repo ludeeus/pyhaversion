@@ -30,9 +30,9 @@ jobs:
       script: find . -name \*.py -exec pyflakes {} +
     - stage: linting
       install: pip install pyflakes
-      name: "Linting with pyflakes"
+      name: "Linting with pytest"
       python: "3.6"
-      script: find . -name \*.py -exec pyflakes {} +
+      script: find . -name \*.py -exec pytest {} +
     - stage: linting
       install: pip install flake8
       name: "Linting with flake8"
