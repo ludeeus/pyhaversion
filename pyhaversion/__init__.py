@@ -8,7 +8,7 @@ import requests
 
 
 def get_version_number(source, branch, image='default'):
-    """Returns the version number based on args."""
+    """Return the version number based on args."""
     if source == 'pip':
         if branch == 'beta':
             version = get_pip_beta()
@@ -120,7 +120,7 @@ def get_hassio_beta(image='default'):
 
 
 def run_test():
-    """Run tests"""
+    """Run tests."""
     sources = ['pip', 'docker', 'hassio']
     branches = ['stable', 'beta']
     for source in sources:
