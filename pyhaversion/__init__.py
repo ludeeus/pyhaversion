@@ -14,24 +14,16 @@ def get_version_number(source, branch, image='default'):
             version = get_pip_beta()
         elif branch == 'stable':
             version = get_pip_stable()
-        else:
-            print('The defined branch is not valid: ' + branch)
     elif source == 'docker':
         if branch == 'beta':
             version = get_docker_beta()
         elif branch == 'stable':
             version = get_docker_stable()
-        else:
-            print('The defined branch is not valid: ' + branch)
     elif source == 'hassio':
         if branch == 'beta':
             version = get_hassio_beta(image)
         elif branch == 'stable':
             version = get_hassio_stable(image)
-        else:
-            print('The defined branch is not valid: ' + branch)
-    else:
-        print('The defined source is not valid: ' + source)
     return version
 
 
