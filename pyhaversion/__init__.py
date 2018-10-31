@@ -35,7 +35,6 @@ class Version(object):
         except ImportError:
             _LOGGER.critical('Home Assistant installation not found.')
 
-
     async def get_pypi_version(self):
         """Get version published to PyPi."""
         base_url = 'https://pypi.org/pypi/homeassistant/json'
