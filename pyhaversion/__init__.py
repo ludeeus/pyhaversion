@@ -32,6 +32,7 @@ class Version(object):
         try:
             from homeassistant.const import __version__ as localversion
             self._version = localversion
+            self._version_data['source'] = 'Local'
         except ImportError:
             _LOGGER.critical('Home Assistant installation not found.')
 
@@ -59,6 +60,7 @@ class Version(object):
                         self._version_data['beta'] = True
             else:
                 self._version = data['info']['version']
+                self._version_data['source'] = 'PyPi'
             _LOGGER.debug('Pip version: %s', self._version)
         except (asyncio.TimeoutError,
                 aiohttp.ClientError, socket.gaierror) as error:
@@ -87,6 +89,7 @@ class Version(object):
                     response = await self._session.get(url_stable)
             data = await response.json()
             self._version = data['homeassistant'][self._image]
+            self._version_data['source'] = 'Hassio'
             self._version_data['hassos'] = data['hassos'][boards[self._image]]
             self._version_data['supervisor'] = data['supervisor']
             self._version_data['hassos-cli'] = data['hassos-cli']
@@ -123,6 +126,7 @@ class Version(object):
                         else:
                             controll = 1
                             self._version = name
+            self._version_data['source'] = 'Docker'
             _LOGGER.debug('Docker version: %s', self._version)
         except (asyncio.TimeoutError,
                 KeyError, TypeError,
