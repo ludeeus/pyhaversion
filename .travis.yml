@@ -40,7 +40,7 @@ jobs:
       python: "3.6"
       script:
         - python setup.py install
-        - python -c"from pyhaversion import version"
+        - python -c"from pyhaversion import Version"
 
     # Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy
