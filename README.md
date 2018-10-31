@@ -8,24 +8,11 @@ _A python module to the newest version number of Home Assistant._
 pip install pyhaversion
 ```
 
-## Example usage
-
-```python
-import pyhaversion
-
-source = 'pip'
-branch = 'stable'
-image = 'default' # Optional (Only used for Hassio)
-
-result = pyhaversion.get_version_number(source, branch, image)
-
-#Print results:
-print('HA version: ' + result['homeassistant'])
-```
+Look at the file `example.py` for a usage example.
 
 ## Valid options for source
 
-- pip
+- pypi
 - docker
 - hassio
 

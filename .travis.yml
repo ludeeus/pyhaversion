@@ -2,7 +2,6 @@ language: python
 stages:
   - linting
   - install
-  - run
   - deploy
 
 jobs:
@@ -22,7 +21,7 @@ jobs:
       install: pip install pylint
       name: "Linting with pylint"
       python: "3.6"
-      script: find . -name \*.py -exec pylint --disable=F0401,W0613 {} +
+      script: find . -name \*.py -exec pylint --disable=F0401,W0613,R0205,R0902,R0913 {} +
     - stage: linting
       install: pip install pyflakes
       name: "Linting with pyflakes"
@@ -34,59 +33,14 @@ jobs:
       python: "3.6"
       script: find . -name \*.py -exec flake8 {} +
 
-
     # Test install the module
     - stage: install
       install: pip install -U pip setuptools wheel
       name: "Setup test"
       python: "3.6"
-      script: python setup.py test
-
-
-    # Run functions
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 2.7"
-      python: "2.7"
       script:
         - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 3.4"
-      python: "3.4"
-      script:
-        - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 3.5"
-      python: "3.5"
-      script:
-        - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 3.6"
-      python: "3.6"
-      script:
-        - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 3.6-dev"
-      python: "3.6-dev"
-      script:
-        - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-    - stage: run
-      install: pip install -U pip setuptools wheel
-      name: "Run with Python 3.7-dev"
-      python: "3.7-dev"
-      script:
-        - python setup.py install
-        - python -c"import pyhaversion; print(pyhaversion.run_test())"
-
+        - python -c"from pyhaversion import version"
 
     # Deploy to PyPi if all tests pass and change was done on master.
     - stage: deploy

@@ -1,15 +1,16 @@
 """Setup configuration."""
 import setuptools
+
 with open("README.md", "r") as fh:
     LONG = fh.read()
 setuptools.setup(
     name="pyhaversion",
-    version="1.0.1",
+    version="2.0.0",
     author="Joakim Sorensen",
-    author_email="joasoe@gmail.com",
+    author_email="ludeeus@gmail.com",
     description="",
     long_description=LONG,
-    install_requires=['requests'],
+    install_requires=['aiohttp', 'async_timeout'],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
     packages=setuptools.find_packages(),
