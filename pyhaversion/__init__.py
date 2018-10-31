@@ -107,12 +107,13 @@ class Version(object):
         try:
             async with async_timeout.timeout(5, loop=self._loop):
                 response = await self._session.get(url)
+                data = await response.json()
                 num = -1
                 controll = 0
                 if self._branch == 'beta':
                     self._version_data['beta'] = True
                     while controll < 1:
-                        name = response[num]['name']
+                        name = data[num]['name']
                         if 'd' in name or 'r' in name:
                             num = num - 1
                         else:
@@ -120,7 +121,7 @@ class Version(object):
                             self._version = name
                 else:
                     while controll < 1:
-                        name = response[num]['name']
+                        name = data[num]['name']
                         if 'd' in name or 'r' in name:
                             num = num - 1
                         else:
