@@ -90,7 +90,8 @@ class Version(object):
             data = await response.json()
             self._version = data['homeassistant'][self._image]
             self._version_data['source'] = 'Hassio'
-            self._version_data['hassos'] = data['hassos'][boards[self._image]]
+            board = boards.get(self._image, boards['default'])
+            self._version_data['hassos'] = data['hassos'][board]
             self._version_data['supervisor'] = data['supervisor']
             self._version_data['hassos-cli'] = data['hassos-cli']
             _LOGGER.debug('Hassio version: %s', self._version)
