@@ -123,7 +123,7 @@ class Version(object):
                 else:
                     while controll < 1:
                         name = data[num]['name']
-                        if 'd' in name or 'r' in name:
+                        if 'd' in name or 'r' in name or 'b' in name:
                             num = num - 1
                         else:
                             controll = 1
