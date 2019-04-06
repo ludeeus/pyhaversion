@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     LONG = fh.read()
 setuptools.setup(
     name="pyhaversion",
-    version="2.1.0",
+    version="2.1.1",
     author="Joakim Sorensen",
     author_email="ludeeus@gmail.com",
     description="",
