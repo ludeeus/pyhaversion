@@ -14,7 +14,8 @@ workflow "Push" {
 }
 
 action "Black Code Formatter" {
-  uses = "lgeiger/black-action@v1.0.1"
+  uses = "lgeiger/black-action@v1.0.1",
+  args = ". --check"
 }
 
 action "Pytest" {
