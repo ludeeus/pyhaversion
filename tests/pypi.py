@@ -19,8 +19,7 @@ async def test_pypi():
 async def test_pypi_beta():
     """Test pypi."""
     async with aiohttp.ClientSession() as session:
-        haversion = Version(
-            asyncio.get_event_loop(), branch='beta', session=session)
+        haversion = Version(asyncio.get_event_loop(), branch="beta", session=session)
         await haversion.get_pypi_version()
         print(haversion.version)
         print(haversion.version_data)
