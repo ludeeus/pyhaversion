@@ -11,6 +11,7 @@ setuptools.setup(
     description="",
     long_description=LONG,
     install_requires=["aiohttp", "async_timeout"],
+    tests_require=["pytest", "aiohttp"],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
     packages=setuptools.find_packages(),
