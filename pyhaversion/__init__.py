@@ -103,31 +103,39 @@ class Version(object):
 
     async def get_docker_version(self):
         """Get version published for docker."""
-        base = 'https://registry.hub.docker.com/v1/repositories/'
-        url = base + 'homeassistant/home-assistant/tags'
+        if self._image == 'default':
+            self._image = 'home-assistant'
+        url = "https://registry.hub.docker.com/v1/repositories/homeassistant/"
+        url += "{}/tags".format(self._image)
         try:
             async with async_timeout.timeout(5, loop=self._loop):
                 response = await self._session.get(url)
-                data = await response.json()
-                num = -1
-                controll = 0
-                if self._branch == 'beta':
-                    self._version_data['beta'] = True
-                    while controll < 1:
-                        name = data[num]['name']
-                        if 'd' in name or 'r' in name:
-                            num = num - 1
-                        else:
-                            controll = 1
-                            self._version = name
+                if response.status == 404:
+                    self._version = None
+                    self._version_data = {'error': 'image not supported',
+                                          'image': self._image}
+                    _LOGGER.critical("image not supported '%s'", self._image)
                 else:
-                    while controll < 1:
-                        name = data[num]['name']
-                        if 'd' in name or 'r' in name or 'b' in name:
-                            num = num - 1
-                        else:
-                            controll = 1
-                            self._version = name
+                    data = await response.json()
+                    num = -1
+                    controll = 0
+                    if self._branch == 'beta':
+                        self._version_data['beta'] = True
+                        while controll < 1:
+                            name = data[num]['name']
+                            if 'd' in name or 'r' in name:
+                                num = num - 1
+                            else:
+                                controll = 1
+                                self._version = name
+                    else:
+                        while controll < 1:
+                            name = data[num]['name']
+                            if 'd' in name or 'r' in name or 'b' in name:
+                                num = num - 1
+                            else:
+                                controll = 1
+                                self._version = name
             self._version_data['source'] = 'Docker'
             _LOGGER.debug('Docker version: %s', self._version)
         except (asyncio.TimeoutError,
