@@ -20,5 +20,5 @@ action "Black Code Formatter" {
 
 action "Pytest" {
   uses = "cclauss/GitHub-Action-for-pytest@0.0.2"
-  args = "python3 -m pytest"
+  args = "python3 -m install aiohttp; python3 -m pytest"
 }
