@@ -11,13 +11,13 @@ setuptools.setup(
     description="",
     long_description=LONG,
     install_requires=["aiohttp", "async_timeout"],
-    tests_require=["pytest", "aiohttp"],
+    tests_require=["pytest", "aiohttp", "pytest-asyncio"],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
     packages=setuptools.find_packages(),
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-    ),
+        "Operating System :: OS Independent"
+    ],
 )
