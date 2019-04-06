@@ -13,6 +13,7 @@ workflow "Push" {
   resolves = [
     "Black Code Formatter",
     "Pytest",
+    "Codecov",
   ]
 }
 
@@ -24,4 +25,9 @@ action "Black Code Formatter" {
 action "Pytest" {
   uses = "cclauss/GitHub-Action-for-pytest@0.0.2"
   args = "python3 -m pip install -e .; python3 setup.py test"
+}
+
+action "Codecov" {
+  uses = "ludeeus/action-codecov@master"
+  secrets = ["CODECOV_TOKEN"]
 }
