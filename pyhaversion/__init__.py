@@ -7,9 +7,11 @@ file for more details.
 import asyncio
 import logging
 import socket
+import re
 
 import aiohttp
 import async_timeout
+from pyhaversion.consts import BOARDS, IMAGES, URL
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -18,139 +20,143 @@ _LOGGER = logging.getLogger(__name__)
 class Version(object):
     """A class for returning HA version information from different sources."""
 
-    def __init__(self, loop, session="none", branch="", image="default"):
+    def __init__(self, loop, session, branch="stable", image="default"):
         """Initialize the class."""
-        self._loop = loop
-        self._session = session
-        self._branch = branch
-        self._image = image
+        self.loop = loop
+        self.session = session
+        self.beta = branch != "stable"
+        self.image = image
         self._version = None
         self._version_data = {}
 
     async def get_local_version(self):
         """Get the local installed version."""
+        self._version_data["source"] = "Local"
         try:
             from homeassistant.const import __version__ as localversion
 
             self._version = localversion
-            self._version_data["source"] = "Local"
-        except ImportError:
-            _LOGGER.critical("Home Assistant installation not found.")
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+        except ImportError as error:
+            _LOGGER.critical("Home Assistant not found - %s", error)
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
 
     async def get_pypi_version(self):
         """Get version published to PyPi."""
-        base_url = "https://pypi.org/pypi/homeassistant/json"
+        self._version_data["beta"] = self.beta
+        self._version_data["source"] = "PyPi"
         try:
-            async with async_timeout.timeout(5, loop=self._loop):
-                response = await self._session.get(base_url)
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(URL["pypi"])
             data = await response.json()
-            if self._branch == "beta":
+            if self.beta:
                 releases = data["releases"]
-                all_versions = []
-                for versions in sorted(releases, reverse=True):
-                    all_versions.append(versions)
-                num = 0
-                controll = 0
-                while controll < 1:
-                    name = all_versions[num]
-                    if ".8." in name or ".9." in name:
-                        num = num + 1
+                for version in sorted(releases, reverse=True):
+                    if re.search("^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
+                        continue
                     else:
-                        controll = 1
-                        self._version = name
-                        self._version_data["beta"] = True
+                        self._version = version
+                        break
             else:
                 self._version = data["info"]["version"]
-                self._version_data["source"] = "PyPi"
-            _LOGGER.debug("Pip version: %s", self._version)
-        except (asyncio.TimeoutError, aiohttp.ClientError, socket.gaierror) as error:
-            _LOGGER.error("Error fetching version from PyPi, %s", error)
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+        except asyncio.TimeoutError as error:
+            _LOGGER.error("Timeouterror fetching version information from PyPi")
+        except KeyError as error:
+            _LOGGER.error("Error parsing version information from PyPi, %s", error)
+        except TypeError as error:
+            _LOGGER.error("Error parsing version information from PyPi, %s", error)
+        except aiohttp.ClientError as error:
+            _LOGGER.error("Error fetching version information from PyPi, %s", error)
+        except socket.gaierror as error:
+            _LOGGER.error("Error fetching version information from PyPi, %s", error)
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
 
     async def get_hassio_version(self):
         """Get version published for hassio."""
-        url_stable = "https://s3.amazonaws.com/hassio-version/stable.json"
-        url_beta = "https://s3.amazonaws.com/hassio-version/beta.json"
-        boards = {
-            "default": "ova",
-            "raspberrypi": "rpi",
-            "raspberrypi2": "rpi2",
-            "raspberrypi3": "rpi3",
-            "raspberrypi3-64": "rpi3-64",
-            "tinker": "tinker",
-            "odroid-c2": "odroid-c2",
-            "odroid-xu": "odroid-c2",
-        }
+        if self.image not in IMAGES:
+            _LOGGER.warning("%s is not a valid image using default", self.image)
+            self.image = "default"
+
+        board = BOARDS.get(self.image, BOARDS["default"])
+
+        self._version_data["source"] = "Hassio"
+        self._version_data["beta"] = self.beta
+        self._version_data["board"] = board
+        self._version_data["image"] = IMAGES[self.image]["hassio"]
+
         try:
-            async with async_timeout.timeout(5, loop=self._loop):
-                if self._branch == "beta":
-                    response = await self._session.get(url_beta)
-                    self._version_data["beta"] = True
-                else:
-                    response = await self._session.get(url_stable)
-            data = await response.json()
-            self._version = data["homeassistant"][self._image]
-            self._version_data["source"] = "Hassio"
-            board = boards.get(self._image, boards["default"])
-            self._version_data["hassos"] = data["hassos"][board]
-            self._version_data["supervisor"] = data["supervisor"]
-            self._version_data["hassos-cli"] = data["hassos-cli"]
-            _LOGGER.debug("Hassio version: %s", self._version)
-        except (
-            asyncio.TimeoutError,
-            KeyError,
-            TypeError,
-            aiohttp.ClientError,
-            socket.gaierror,
-        ) as error:
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(
+                    URL["hassio"]["beta" if self.beta else "stable"]
+                )
+                data = await response.json()
+
+                self._version = data["homeassistant"][IMAGES[self.image]["hassio"]]
+
+                self._version_data["hassos"] = data["hassos"][board]
+                self._version_data["supervisor"] = data["supervisor"]
+                self._version_data["hassos-cli"] = data["hassos-cli"]
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+        except asyncio.TimeoutError as error:
+            _LOGGER.error("Timeouterror fetching version information for hassio")
+        except KeyError as error:
+            _LOGGER.error("Error parsing version information for hassio, %s", error)
+        except TypeError as error:
+            _LOGGER.error("Error parsing version information for hassio, %s", error)
+        except aiohttp.ClientError as error:
             _LOGGER.error("Error fetching version information for hassio, %s", error)
+        except socket.gaierror as error:
+            _LOGGER.error("Error fetching version information for hassio, %s", error)
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
 
     async def get_docker_version(self):
         """Get version published for docker."""
-        if self._image == "default":
-            self._image = "home-assistant"
-        url = "https://registry.hub.docker.com/v1/repositories/homeassistant/"
-        url += "{}/tags".format(self._image)
+        if self.image not in IMAGES:
+            _LOGGER.warning("%s is not a valid image using default", self.image)
+            self.image = "default"
+
+        self._version_data["beta"] = self.beta
+        self._version_data["source"] = "Docker"
+        self._version_data["image"] = IMAGES[self.image]["docker"]
         try:
-            async with async_timeout.timeout(5, loop=self._loop):
-                response = await self._session.get(url)
-                if response.status == 404:
-                    self._version = None
-                    self._version_data = {
-                        "error": "image not supported",
-                        "image": self._image,
-                    }
-                    _LOGGER.critical("image not supported '%s'", self._image)
-                else:
-                    data = await response.json()
-                    num = -1
-                    controll = 0
-                    if self._branch == "beta":
-                        self._version_data["beta"] = True
-                        while controll < 1:
-                            name = data[num]["name"]
-                            if "d" in name or "r" in name:
-                                num = num - 1
-                            else:
-                                controll = 1
-                                self._version = name
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(
+                    URL["docker"].format(IMAGES[self.image]["docker"])
+                )
+                data = await response.json()
+                for version in sorted(data, key=lambda k: k["name"], reverse=True):
+                    if version["name"] in ["latest", "landingpage", "rc", "dev"]:
+                        continue
+                    elif self.beta and re.search("\b.+b.\b", version["name"]):
+                        continue
                     else:
-                        while controll < 1:
-                            name = data[num]["name"]
-                            if "d" in name or "r" in name or "b" in name:
-                                num = num - 1
-                            else:
-                                controll = 1
-                                self._version = name
-            self._version_data["source"] = "Docker"
-            _LOGGER.debug("Docker version: %s", self._version)
-        except (
-            asyncio.TimeoutError,
-            KeyError,
-            TypeError,
-            aiohttp.ClientError,
-            socket.gaierror,
-        ) as error:
-            _LOGGER.error("Error fetching version from dockerhub, %s", error)
+                        self._version = version["name"]
+                        break
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+        except asyncio.TimeoutError as error:
+            _LOGGER.error("Timeouterror fetching version information for docker")
+        except KeyError as error:
+            _LOGGER.error("Error parsing version information for docker, %s", error)
+        except TypeError as error:
+            _LOGGER.error("Error parsing version information for docker, %s", error)
+        except aiohttp.ClientError as error:
+            _LOGGER.error("Error fetching version information for docker, %s", error)
+        except socket.gaierror as error:
+            _LOGGER.error("Error fetching version information for docker, %s", error)
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
 
     @property
     def version(self):
