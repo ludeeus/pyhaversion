@@ -55,7 +55,7 @@ class Version(object):
             if self.beta:
                 releases = data["releases"]
                 for version in sorted(releases, reverse=True):
-                    if re.search("^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
+                    if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
                         continue
                     else:
                         self._version = version
@@ -137,11 +137,19 @@ class Version(object):
                 for version in sorted(data, key=lambda k: k["name"], reverse=True):
                     if version["name"] in ["latest", "landingpage", "rc", "dev"]:
                         continue
-                    elif self.beta and re.search("\b.+b.\b", version["name"]):
-                        continue
+                    elif re.search(r"\b.+b\d", version["name"]):
+                        if self.beta:
+                            self._version = version["name"]
+                            break
+                        else:
+                            continue
                     else:
                         self._version = version["name"]
+
+                    if self._version is not None:
                         break
+                    else:
+                        continue
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
