@@ -37,7 +37,7 @@ IMAGES = {
 }
 
 URL = {
-    "docker": "https://registry.hub.docker.com/v1/repositories/homeassistant/{}/tags",
+    "docker": "https://registry.hub.docker.com/v2/repositories/homeassistant/{}/tags",
     "hassio": {
         "stable": "https://s3.amazonaws.com/hassio-version/stable.json",
         "beta": "https://s3.amazonaws.com/hassio-version/beta.json",

@@ -48,20 +48,32 @@ class Version(object):
         """Get version published to PyPi."""
         self._version_data["beta"] = self.beta
         self._version_data["source"] = "PyPi"
+
+        info_version = None
+        last_release = None
+
         try:
             async with async_timeout.timeout(5, loop=self.loop):
                 response = await self.session.get(URL["pypi"])
             data = await response.json()
+
+            info_version = data["info"]["version"]
+            releases = data["releases"]
+
+            for version in sorted(releases, reverse=True):
+                if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
+                    continue
+                else:
+                    last_release = version
+                    break
+
+            self._version = info_version
+
             if self.beta:
-                releases = data["releases"]
-                for version in sorted(releases, reverse=True):
-                    if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
-                        continue
-                    else:
-                        self._version = version
-                        break
-            else:
-                self._version = data["info"]["version"]
+                if info_version in last_release:
+                    self._version = info_version
+                else:
+                    self._version = last_release
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
@@ -134,7 +146,7 @@ class Version(object):
                     URL["docker"].format(IMAGES[self.image]["docker"])
                 )
                 data = await response.json()
-                for version in sorted(data, key=lambda k: k["name"], reverse=True):
+                for version in data["results"]:
                     if version["name"] in ["latest", "landingpage", "rc", "dev"]:
                         continue
                     elif re.search(r"\b.+b\d", version["name"]):
