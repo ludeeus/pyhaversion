@@ -6,3 +6,4 @@ Scripts
 pyvenv.cfg
 .pytest_cache
 *egg-info*
+RESPONSES
