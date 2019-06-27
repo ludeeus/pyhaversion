@@ -4,7 +4,7 @@ import json
 
 import aiohttp
 import pytest
-from pyhaversion import Version
+from pyhaversion import PyPiVersion
 from .const import (
     HEADERS,
     STABLE_VERSION,
@@ -28,8 +28,8 @@ async def test_stable_version(aresponses, event_loop, pypi_response):
     )
 
     async with aiohttp.ClientSession(loop=event_loop) as session:
-        haversion = Version(event_loop, session)
-        await haversion.get_pypi_version()
+        haversion = PyPiVersion(event_loop, session)
+        await haversion.get_version()
         assert haversion.version == STABLE_VERSION
 
 
@@ -46,8 +46,8 @@ async def test_beta_version(aresponses, event_loop, pypi_response):
     )
 
     async with aiohttp.ClientSession(loop=event_loop) as session:
-        haversion = Version(event_loop, session, "beta")
-        await haversion.get_pypi_version()
+        haversion = PyPiVersion(event_loop, session, "beta")
+        await haversion.get_version()
         assert haversion.version == BETA_VERSION
 
 
@@ -66,8 +66,8 @@ async def test_stable_version_beta_week(
     )
 
     async with aiohttp.ClientSession(loop=event_loop) as session:
-        haversion = Version(event_loop, session)
-        await haversion.get_pypi_version()
+        haversion = PyPiVersion(event_loop, session)
+        await haversion.get_version()
         assert haversion.version == STABLE_VERSION_BETA_WEEK
 
 
@@ -84,6 +84,6 @@ async def test_beta_version_beta_week(aresponses, event_loop, pypi_response_beta
     )
 
     async with aiohttp.ClientSession(loop=event_loop) as session:
-        haversion = Version(event_loop, session, "beta")
-        await haversion.get_pypi_version()
+        haversion = PyPiVersion(event_loop, session, "beta")
+        await haversion.get_version()
         assert haversion.version == BETA_VERSION_BETA_WEEK

@@ -17,20 +17,39 @@ from pyhaversion.consts import BOARDS, IMAGES, URL
 _LOGGER = logging.getLogger(__name__)
 
 
-class Version(object):
+class Version:
     """A class for returning HA version information from different sources."""
 
     def __init__(self, loop, session, branch="stable", image="default"):
         """Initialize the class."""
         self.loop = loop
         self.session = session
-        self.beta = branch != "stable"
+        self.branch = branch
         self.image = image
         self._version = None
         self._version_data = {}
 
-    async def get_local_version(self):
-        """Get the local installed version."""
+    @property
+    def beta(self):
+        """Return bool if beta versions should be returned."""
+        return self.branch != "stable"
+
+    @property
+    def version(self):
+        """Return the version."""
+        return self._version
+
+    @property
+    def version_data(self):
+        """Return extended version data for supported sources."""
+        return self._version_data
+
+
+class LocalVersion(Version):
+    """Local version."""
+
+    async def get_version(self):
+        """Get version."""
         self._version_data["source"] = "Local"
         try:
             from homeassistant.const import __version__ as localversion
@@ -39,100 +58,18 @@ class Version(object):
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
+
         except ImportError as error:
             _LOGGER.critical("Home Assistant not found - %s", error)
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.critical("Something really wrong happend! - %s", error)
 
-    async def get_pypi_version(self):
-        """Get version published to PyPi."""
-        self._version_data["beta"] = self.beta
-        self._version_data["source"] = "PyPi"
 
-        info_version = None
-        last_release = None
+class DockerVersion(Version):
+    """Docker version."""
 
-        try:
-            async with async_timeout.timeout(5, loop=self.loop):
-                response = await self.session.get(URL["pypi"])
-            data = await response.json()
-
-            info_version = data["info"]["version"]
-            releases = data["releases"]
-
-            for version in sorted(releases, reverse=True):
-                if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
-                    continue
-                else:
-                    last_release = version
-                    break
-
-            self._version = info_version
-
-            if self.beta:
-                if info_version in last_release:
-                    self._version = info_version
-                else:
-                    self._version = last_release
-
-            _LOGGER.debug("Version: %s", self.version)
-            _LOGGER.debug("Version data: %s", self.version_data)
-        except asyncio.TimeoutError as error:
-            _LOGGER.error("Timeouterror fetching version information from PyPi")
-        except KeyError as error:
-            _LOGGER.error("Error parsing version information from PyPi, %s", error)
-        except TypeError as error:
-            _LOGGER.error("Error parsing version information from PyPi, %s", error)
-        except aiohttp.ClientError as error:
-            _LOGGER.error("Error fetching version information from PyPi, %s", error)
-        except socket.gaierror as error:
-            _LOGGER.error("Error fetching version information from PyPi, %s", error)
-        except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
-
-    async def get_hassio_version(self):
-        """Get version published for hassio."""
-        if self.image not in IMAGES:
-            _LOGGER.warning("%s is not a valid image using default", self.image)
-            self.image = "default"
-
-        board = BOARDS.get(self.image, BOARDS["default"])
-
-        self._version_data["source"] = "Hassio"
-        self._version_data["beta"] = self.beta
-        self._version_data["board"] = board
-        self._version_data["image"] = IMAGES[self.image]["hassio"]
-
-        try:
-            async with async_timeout.timeout(5, loop=self.loop):
-                response = await self.session.get(
-                    URL["hassio"]["beta" if self.beta else "stable"]
-                )
-                data = await response.json()
-
-                self._version = data["homeassistant"][IMAGES[self.image]["hassio"]]
-
-                self._version_data["hassos"] = data["hassos"][board]
-                self._version_data["supervisor"] = data["supervisor"]
-                self._version_data["hassos-cli"] = data["hassos-cli"]
-
-            _LOGGER.debug("Version: %s", self.version)
-            _LOGGER.debug("Version data: %s", self.version_data)
-        except asyncio.TimeoutError as error:
-            _LOGGER.error("Timeouterror fetching version information for hassio")
-        except KeyError as error:
-            _LOGGER.error("Error parsing version information for hassio, %s", error)
-        except TypeError as error:
-            _LOGGER.error("Error parsing version information for hassio, %s", error)
-        except aiohttp.ClientError as error:
-            _LOGGER.error("Error fetching version information for hassio, %s", error)
-        except socket.gaierror as error:
-            _LOGGER.error("Error fetching version information for hassio, %s", error)
-        except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
-
-    async def get_docker_version(self):
-        """Get version published for docker."""
+    async def get_version(self):
+        """Get version."""
         if self.image not in IMAGES:
             _LOGGER.warning("%s is not a valid image using default", self.image)
             self.image = "default"
@@ -165,25 +102,137 @@ class Version(object):
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
+
         except asyncio.TimeoutError as error:
-            _LOGGER.error("Timeouterror fetching version information for docker")
-        except KeyError as error:
-            _LOGGER.error("Error parsing version information for docker, %s", error)
-        except TypeError as error:
-            _LOGGER.error("Error parsing version information for docker, %s", error)
-        except aiohttp.ClientError as error:
-            _LOGGER.error("Error fetching version information for docker, %s", error)
-        except socket.gaierror as error:
-            _LOGGER.error("Error fetching version information for docker, %s", error)
+            _LOGGER.error(
+                "Timeouterror fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (KeyError, TypeError) as error:
+            _LOGGER.error(
+                "Error parsing version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as error:
+            _LOGGER.error(
+                "Error fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.critical("Something really wrong happend! - %s", error)
 
-    @property
-    def version(self):
-        """Return the version."""
-        return self._version
 
-    @property
-    def version_data(self):
-        """Return extended version data for supported sources."""
-        return self._version_data
+class HassioVersion(Version):
+    """Local version."""
+
+    async def get_version(self):
+        """Get version."""
+        if self.image not in IMAGES:
+            _LOGGER.warning("%s is not a valid image using default", self.image)
+            self.image = "default"
+
+        board = BOARDS.get(self.image, BOARDS["default"])
+
+        self._version_data["source"] = "Hassio"
+        self._version_data["beta"] = self.beta
+        self._version_data["board"] = board
+        self._version_data["image"] = IMAGES[self.image]["hassio"]
+
+        try:
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(
+                    URL["hassio"]["beta" if self.beta else "stable"]
+                )
+                data = await response.json()
+
+                self._version = data["homeassistant"][IMAGES[self.image]["hassio"]]
+
+                self._version_data["hassos"] = data["hassos"][board]
+                self._version_data["supervisor"] = data["supervisor"]
+                self._version_data["hassos-cli"] = data["hassos-cli"]
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+
+        except asyncio.TimeoutError as error:
+            _LOGGER.error(
+                "Timeouterror fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (KeyError, TypeError) as error:
+            _LOGGER.error(
+                "Error parsing version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as error:
+            _LOGGER.error(
+                "Error fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
+
+
+class PyPiVersion(Version):
+    """Local version."""
+
+    async def get_version(self):
+        """Get version."""
+        self._version_data["beta"] = self.beta
+        self._version_data["source"] = "PyPi"
+
+        info_version = None
+        last_release = None
+
+        try:
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(URL["pypi"])
+            data = await response.json()
+
+            info_version = data["info"]["version"]
+            releases = data["releases"]
+
+            for version in sorted(releases, reverse=True):
+                if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
+                    continue
+                else:
+                    last_release = version
+                    break
+
+            self._version = info_version
+
+            if self.beta:
+                if info_version in last_release:
+                    self._version = info_version
+                else:
+                    self._version = last_release
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+
+        except asyncio.TimeoutError as error:
+            _LOGGER.error(
+                "Timeouterror fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (KeyError, TypeError) as error:
+            _LOGGER.error(
+                "Error parsing version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as error:
+            _LOGGER.error(
+                "Error fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happend! - %s", error)
