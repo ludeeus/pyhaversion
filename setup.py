@@ -10,15 +10,8 @@ setuptools.setup(
     author_email="ludeeus@gmail.com",
     description="",
     long_description=LONG,
-    install_requires=["aiohttp", "async_timeout"],
+    install_requires=["aiohttp", "async_timeout", "pytest-runner"],
     tests_require=[
-        "pytest",
-        "aiohttp",
-        "pytest-asyncio",
-        "pytest-runner",
-        "aresponses",
-    ],
-    setup_require=[
         "pytest",
         "aiohttp",
         "pytest-asyncio",
