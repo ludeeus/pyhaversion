@@ -84,7 +84,7 @@ class DockerVersion(Version):
                 )
                 data = await response.json()
                 for version in data["results"]:
-                    if version["name"] in ["latest", "landingpage", "rc", "dev"]:
+                    if version["name"] in ["latest", "landingpage", "rc", "dev", "beta", "stable"]:
                         continue
                     elif re.search(r"\b.+b\d", version["name"]):
                         if self.beta:
