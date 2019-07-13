@@ -18,6 +18,13 @@ setuptools.setup(
         "pytest-runner",
         "aresponses",
     ],
+    setup_require=[
+        "pytest",
+        "aiohttp",
+        "pytest-asyncio",
+        "pytest-runner",
+        "aresponses",
+    ],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
     packages=setuptools.find_packages(),
