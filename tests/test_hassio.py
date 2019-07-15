@@ -24,8 +24,8 @@ from .fixtures.fixture_hassio import (
 async def test_stable_version(aresponses, event_loop, hassio_response):
     """Test hassio stable."""
     aresponses.add(
-        "s3.amazonaws.com",
-        "/hassio-version/stable.json",
+        "version.home-assistant.io",
+        "/stable.json",
         "get",
         aresponses.Response(
             text=json.dumps(hassio_response), status=200, headers=HEADERS
@@ -42,8 +42,8 @@ async def test_stable_version(aresponses, event_loop, hassio_response):
 async def test_beta_version(aresponses, event_loop, hassio_beta_response):
     """Test hassio beta."""
     aresponses.add(
-        "s3.amazonaws.com",
-        "/hassio-version/beta.json",
+        "version.home-assistant.io",
+        "/beta.json",
         "get",
         aresponses.Response(
             text=json.dumps(hassio_beta_response), status=200, headers=HEADERS
@@ -62,8 +62,8 @@ async def test_stable_version_beta_week(
 ):
     """Test hassio stable during beta week."""
     aresponses.add(
-        "s3.amazonaws.com",
-        "/hassio-version/stable.json",
+        "version.home-assistant.io",
+        "/stable.json",
         "get",
         aresponses.Response(
             text=json.dumps(hassio_response_beta_week), status=200, headers=HEADERS
@@ -82,8 +82,8 @@ async def test_beta_version_beta_week(
 ):
     """Test hassio beta during beta week."""
     aresponses.add(
-        "s3.amazonaws.com",
-        "/hassio-version/beta.json",
+        "version.home-assistant.io",
+        "/beta.json",
         "get",
         aresponses.Response(
             text=json.dumps(hassio_beta_response_beta_week), status=200, headers=HEADERS
