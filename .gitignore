@@ -3,6 +3,7 @@ __pycache__
 include
 Lib
 Scripts
+venv
 pyvenv.cfg
 .pytest_cache
 *egg-info*
