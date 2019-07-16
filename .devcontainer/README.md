@@ -1,8 +1,8 @@
 ## Devcontainer
 
-[General documentation]()
+[General documentation](https://aka.ms/vscode-remote)
 
 ### Requirements
 
-- [Docker](https://aka.ms/vscode-remote)
+- [Docker](https://docs.docker.com/install/)
 - [Visual Studio Code](https://code.visualstudio.com/)
