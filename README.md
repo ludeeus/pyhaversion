@@ -10,11 +10,6 @@ pip install pyhaversion
 
 Look at the file `example.py` for a usage example.
 
-## Valid options for source
-
-- pypi
-- docker
-- hassio
 
 ## Valid options for branch
 

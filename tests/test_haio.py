@@ -1,4 +1,4 @@
-"""Tests for PyPi."""
+"""Tests for ha.io/version.json."""
 
 import json
 
@@ -17,7 +17,7 @@ from .fixtures.fixture_haio import haio_response
 
 @pytest.mark.asyncio
 async def test_haio(aresponses, event_loop, haio_response):
-    """Test pypi stable."""
+    """Test ha.io/version.json stable."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",
