@@ -243,3 +243,45 @@ class PyPiVersion(Version):
             )
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.critical("Something really wrong happened! - %s", error)
+
+
+class HaIoVersion(Version):
+    """Home-assistant.io version."""
+
+    async def get_version(self):
+        """Get version."""
+        self._version_data["beta"] = self.beta
+        self._version_data["source"] = "home-assistant.io"
+
+        try:
+            async with async_timeout.timeout(5, loop=self.loop):
+                response = await self.session.get(URL["haio"])
+            data = await response.json()
+
+            self._version = data["current_version"]
+            del data["current_version"]
+            self._version_data.update(data)
+
+            _LOGGER.debug("Version: %s", self.version)
+            _LOGGER.debug("Version data: %s", self.version_data)
+
+        except asyncio.TimeoutError as error:
+            _LOGGER.error(
+                "Timeout error fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (KeyError, TypeError) as error:
+            _LOGGER.error(
+                "Error parsing version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except (aiohttp.ClientError, socket.gaierror) as error:
+            _LOGGER.error(
+                "Error fetching version information from %s, %s",
+                self._version_data["source"],
+                error,
+            )
+        except Exception as error:  # pylint: disable=broad-except
+            _LOGGER.critical("Something really wrong happened! - %s", error)
