@@ -6,9 +6,8 @@ RUN apt-get update \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Custom "commands"
-RUN echo 'alias test="python //workspaces/pyhaversion/setup.py test"' >> ~/.bashrc
-RUN echo 'alias commands="cat //workspaces/pyhaversion/.devcontainer/commands"' >> ~/.bashrc
+
+RUN python3 -m pip install black pylint
 
 WORKDIR /workspace
 
