@@ -133,7 +133,7 @@ class DockerVersion(Version):
 
 
 class HassioVersion(Version):
-    """Local version."""
+    """Hass.io version."""
 
     async def get_version(self):
         """Get version."""
@@ -187,7 +187,7 @@ class HassioVersion(Version):
 
 
 class PyPiVersion(Version):
-    """Local version."""
+    """Python Package Index version."""
 
     async def get_version(self):
         """Get version."""
