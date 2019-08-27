@@ -77,35 +77,41 @@ class DockerVersion(Version):
         self._version_data["beta"] = self.beta
         self._version_data["source"] = "Docker"
         self._version_data["image"] = IMAGES[self.image]["docker"]
+        version, data = None, None
         try:
-            async with async_timeout.timeout(5, loop=self.loop):
-                response = await self.session.get(
-                    URL["docker"].format(IMAGES[self.image]["docker"])
-                )
-                data = await response.json()
-                for version in data["results"]:
-                    if version["name"] in [
-                        "latest",
-                        "landingpage",
-                        "rc",
-                        "dev",
-                        "beta",
-                        "stable",
-                    ]:
-                        continue
-                    elif re.search(r"\b.+b\d", version["name"]):
-                        if self.beta:
-                            self._version = version["name"]
+            while version is None:
+                if data is None:
+                    url = URL["docker"].format(IMAGES[self.image]["docker"])
+                else:
+                    url = data["next"]
+                async with async_timeout.timeout(5, loop=self.loop):
+                    response = await self.session.get(url)
+                    data = await response.json()
+                    for tag in data["results"]:
+                        if tag["name"] in [
+                            "latest",
+                            "landingpage",
+                            "rc",
+                            "beta",
+                            "stable",
+                        ]:
+                            continue
+                        elif "dev" in tag["name"]:
+                            continue
+                        elif re.search(r"\b.+b\d", tag["name"]):
+                            if self.beta:
+                                version = tag["name"]
+                                break
+                            else:
+                                continue
+                        else:
+                            version = tag["name"]
+
+                        if version is not None:
                             break
                         else:
                             continue
-                    else:
-                        self._version = version["name"]
-
-                    if self._version is not None:
-                        break
-                    else:
-                        continue
+                self._version = version
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
@@ -250,7 +256,7 @@ class HaIoVersion(Version):
 
     async def get_version(self):
         """Get version."""
-        self._version_data["beta"] = self.beta
+        self._version_data["beta"] = False
         self._version_data["source"] = "home-assistant.io"
 
         try:
