@@ -62,7 +62,7 @@ class LocalVersion(Version):
         except ImportError as error:
             _LOGGER.critical("Home Assistant not found - %s", error)
         except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
+            _LOGGER.critical("Something really wrong happened! - %s", error)
 
 
 class DockerVersion(Version):
@@ -112,7 +112,7 @@ class DockerVersion(Version):
 
         except asyncio.TimeoutError as error:
             _LOGGER.error(
-                "Timeouterror fetching version information from %s, %s",
+                "Timeout error fetching version information from %s, %s",
                 self._version_data["source"],
                 error,
             )
@@ -129,7 +129,7 @@ class DockerVersion(Version):
                 error,
             )
         except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
+            _LOGGER.critical("Something really wrong happened! - %s", error)
 
 
 class HassioVersion(Version):
@@ -166,7 +166,7 @@ class HassioVersion(Version):
 
         except asyncio.TimeoutError as error:
             _LOGGER.error(
-                "Timeouterror fetching version information from %s, %s",
+                "Timeout error fetching version information from %s, %s",
                 self._version_data["source"],
                 error,
             )
@@ -183,7 +183,7 @@ class HassioVersion(Version):
                 error,
             )
         except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
+            _LOGGER.critical("Something really wrong happened! - %s", error)
 
 
 class PyPiVersion(Version):
@@ -225,7 +225,7 @@ class PyPiVersion(Version):
 
         except asyncio.TimeoutError as error:
             _LOGGER.error(
-                "Timeouterror fetching version information from %s, %s",
+                "Timeout error fetching version information from %s, %s",
                 self._version_data["source"],
                 error,
             )
@@ -242,4 +242,4 @@ class PyPiVersion(Version):
                 error,
             )
         except Exception as error:  # pylint: disable=broad-except
-            _LOGGER.critical("Something really wrong happend! - %s", error)
+            _LOGGER.critical("Something really wrong happened! - %s", error)
