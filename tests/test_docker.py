@@ -12,7 +12,14 @@ from .const import (
     BETA_VERSION,
     BETA_VERSION_BETA_WEEK,
 )
-from .fixtures.fixture_docker import docker_response, docker_response_beta_week
+from .fixtures.fixture_docker import (
+    docker_response,
+    docker_response_beta_week,
+    docker_response_beta_week_page1,
+    docker_response_beta_week_page2,
+    docker_response_page1,
+    docker_response_page2,
+)
 
 
 @pytest.mark.asyncio
@@ -82,6 +89,132 @@ async def test_beta_version_beta_week(
         "get",
         aresponses.Response(
             text=json.dumps(docker_response_beta_week), status=200, headers=HEADERS
+        ),
+    )
+
+    async with aiohttp.ClientSession(loop=event_loop) as session:
+        haversion = DockerVersion(event_loop, session, "beta")
+        await haversion.get_version()
+        assert haversion.version == BETA_VERSION_BETA_WEEK
+
+
+@pytest.mark.asyncio
+async def test_stable_version_pagination(
+    aresponses, event_loop, docker_response_page1, docker_response_page2
+):
+    """Test docker beta during beta week."""
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_page1), status=200, headers=HEADERS
+        ),
+    )
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags/page2",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_page2), status=200, headers=HEADERS
+        ),
+    )
+
+    async with aiohttp.ClientSession(loop=event_loop) as session:
+        haversion = DockerVersion(event_loop, session)
+        await haversion.get_version()
+        assert haversion.version == STABLE_VERSION
+
+
+@pytest.mark.asyncio
+async def test_beta_version_pagination(
+    aresponses, event_loop, docker_response_page1, docker_response_page2
+):
+    """Test docker beta during beta week."""
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_page1), status=200, headers=HEADERS
+        ),
+    )
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags/page2",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_page2), status=200, headers=HEADERS
+        ),
+    )
+
+    async with aiohttp.ClientSession(loop=event_loop) as session:
+        haversion = DockerVersion(event_loop, session, "beta")
+        await haversion.get_version()
+        assert haversion.version == BETA_VERSION
+
+
+@pytest.mark.asyncio
+async def test_stable_version_beta_week_pagination(
+    aresponses,
+    event_loop,
+    docker_response_beta_week_page1,
+    docker_response_beta_week_page2,
+):
+    """Test docker beta during beta week."""
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_beta_week_page1),
+            status=200,
+            headers=HEADERS,
+        ),
+    )
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags/page2",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_beta_week_page2),
+            status=200,
+            headers=HEADERS,
+        ),
+    )
+
+    async with aiohttp.ClientSession(loop=event_loop) as session:
+        haversion = DockerVersion(event_loop, session)
+        await haversion.get_version()
+        assert haversion.version == STABLE_VERSION_BETA_WEEK
+
+
+@pytest.mark.asyncio
+async def test_beta_version_beta_week_pagination(
+    aresponses,
+    event_loop,
+    docker_response_beta_week_page1,
+    docker_response_beta_week_page2,
+):
+    """Test docker beta during beta week."""
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_beta_week_page1),
+            status=200,
+            headers=HEADERS,
+        ),
+    )
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags/page2",
+        "get",
+        aresponses.Response(
+            text=json.dumps(docker_response_beta_week_page2),
+            status=200,
+            headers=HEADERS,
         ),
     )
 
