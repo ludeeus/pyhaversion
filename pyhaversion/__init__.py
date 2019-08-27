@@ -83,7 +83,10 @@ class DockerVersion(Version):
                 if data is None:
                     url = URL["docker"].format(IMAGES[self.image]["docker"])
                 else:
-                    url = data["next"]
+                    if not isinstance(data, dict):
+                        _LOGGER.critical("Something really wrong happened!")
+                        return
+                    url = data["next"]  # pylint: disable=unsubscriptable-object
                 async with async_timeout.timeout(5, loop=self.loop):
                     response = await self.session.get(url)
                     data = await response.json()
