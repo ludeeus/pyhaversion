@@ -8,6 +8,8 @@ def docker_response():
     return {
         "results": [
             {"name": "dev"},
+            {"name": "0.99.0.dev19700101"},
+            {"name": "stable"},
             {"name": "9.99.9"},
             {"name": "latest"},
             {"name": "rc"},
@@ -27,6 +29,8 @@ def docker_response_beta_week():
     return {
         "results": [
             {"name": "dev"},
+            {"name": "0.99.0.dev19700101"},
+            {"name": "stable"},
             {"name": "beta"},
             {"name": "9.99.9b0"},
             {"name": "rc"},
