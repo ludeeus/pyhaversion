@@ -43,4 +43,5 @@ URL = {
         "beta": "https://version.home-assistant.io/beta.json",
     },
     "pypi": "https://pypi.org/pypi/homeassistant/json",
+    "haio": "https://www.home-assistant.io/version.json",
 }
