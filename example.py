@@ -2,13 +2,13 @@
 import asyncio
 import aiohttp
 
-from pyhaversion import DockerVersion
+from pyhaversion import HassioVersion
 
 
 async def test():
     """Example usage of pyhaversion."""
     async with aiohttp.ClientSession() as session:
-        data = DockerVersion(loop, branch="beta", session=session, image="qemux86-64")
+        data = HassioVersion(loop, branch="beta", session=session, image="raspberrypi4")
         await data.get_version()
 
         print("Version:", data.version)

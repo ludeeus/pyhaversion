@@ -33,6 +33,11 @@ IMAGES = {
         "hassio": "raspberrypi3-64",
     },
     "raspberrypi3": {"docker": "raspberrypi3-homeassistant", "hassio": "raspberrypi3"},
+    "raspberrypi4-64": {
+        "docker": "raspberrypi4-64-homeassistant",
+        "hassio": "raspberrypi4-64",
+    },
+    "raspberrypi4": {"docker": "raspberrypi4-homeassistant", "hassio": "raspberrypi4"},
     "tinker": {"docker": "tinker-homeassistant", "hassio": "tinker"},
 }
 
