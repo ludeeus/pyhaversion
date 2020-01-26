@@ -17,7 +17,7 @@ jobs:
           python-version: "3.x"
       
       - name: Install dependencies
-        run: python -m pip install setuptools wheel
+        run: python -m pip install setuptools wheel twine
 
       - name: Publish to PyPi
         env:
