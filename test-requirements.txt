@@ -1,0 +1,7 @@
+pytest
+aiohttp==3.5.4
+pytest-asyncio
+pytest-runner
+aresponses
+async_timeout
+black
