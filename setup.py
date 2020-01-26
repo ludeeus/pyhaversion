@@ -10,7 +10,7 @@ setuptools.setup(
     author_email="hi@ludeeus.dev",
     description="",
     long_description=LONG,
-    install_requires=["aiohttp", "async_timeout", "pytest-runner"],
+    install_requires=["aiohttp", "async_timeout<=3.0.1", "pytest-runner"],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
     packages=setuptools.find_packages(),

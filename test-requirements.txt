@@ -3,5 +3,5 @@ aiohttp
 pytest-asyncio
 pytest-runner
 aresponses
-async_timeout>=3.0.1
+async_timeout<=3.0.1
 black
