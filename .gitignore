@@ -8,3 +8,4 @@ pyvenv.cfg
 .pytest_cache
 *egg-info*
 RESPONSES
+.vscode/settings.json

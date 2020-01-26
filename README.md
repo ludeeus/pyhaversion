@@ -28,4 +28,6 @@ Look at the file `example.py` for a usage example.
 - raspberrypi2
 - raspberrypi3
 - raspberrypi3-64
+- raspberrypi4
+- raspberrypi4-64
 - tinker
