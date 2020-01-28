@@ -5,7 +5,6 @@ BOARDS = {
     "intel-nuc": "intel-nuc",
     "odroid-c2": "odroid-c2",
     "odroid-xu": "odroid-c2",
-    "orangepi-prime": "opi-prime",
     "raspberrypi": "rpi",
     "raspberrypi2": "rpi2",
     "raspberrypi3-64": "rpi3-64",
@@ -18,10 +17,6 @@ IMAGES = {
     "intel-nuc": {"docker": "intel-nuc-homeassistant", "hassio": "intel-nuc"},
     "odroid-c2": {"docker": "odroid-c2-homeassistant", "hassio": "odroid-c2"},
     "odroid-xu": {"docker": "odroid-xu-homeassistant", "hassio": "odroid-xu"},
-    "orangepi-prime": {
-        "docker": "orangepi-prime-homeassistant",
-        "hassio": "orangepi-prime",
-    },
     "qemuarm-64": {"docker": "qemuarm-64-homeassistant", "hassio": "qemuarm-64"},
     "qemuarm": {"docker": "qemuarm-homeassistant", "hassio": "qemuarm"},
     "qemux86-64": {"docker": "qemux86-64-homeassistant", "hassio": "qemux86-64"},
