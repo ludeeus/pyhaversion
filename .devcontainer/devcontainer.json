@@ -2,25 +2,29 @@
 {
 	"name": "pyhaversion",
 	"context": "..",
-	"dockerFile": "Dockerfile",
-	"postCreateCommand": "python setup.py develop",
+	"image": "ludeeus/devcontainer:integration",
+	"postCreateCommand": "python3 setup.py develop",
 	"runArgs": [
-		"-e", "GIT_EDTIOR='code --wait'"
+		"-v",
+		"${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
 	],
 	"extensions": [
-		"ms-python.python"
+		"ms-python.python",
+		"github.vscode-pull-request-github",
+		"ryanluker.vscode-coverage-gutters",
+		"tabnine.tabnine-vscode"
 	],
 	"settings": {
+		"files.eol": "\n",
 		"editor.tabSize": 4,
-		"python.pythonPath": "/usr/local/bin/python",
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"python.pythonPath": "/usr/bin/python3",
 		"python.linting.pylintEnabled": true,
 		"python.linting.enabled": true,
 		"python.formatting.provider": "black",
 		"editor.formatOnPaste": false,
 		"editor.formatOnSave": true,
 		"editor.formatOnType": true,
-		"files.trimTrailingWhitespace": true,
-		"editor.rulers": [100],
-		"terminal.integrated.shell.linux": "/bin/bash"
+		"files.trimTrailingWhitespace": true
 	}
 }

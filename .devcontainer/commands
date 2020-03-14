@@ -1,4 +1,0 @@
-Custom commands aviable inside the container
-
-commands    Shows this help section
-test        Run pytests on the package

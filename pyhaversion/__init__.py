@@ -11,6 +11,7 @@ import re
 
 import aiohttp
 import async_timeout
+import semantic_version
 from pyhaversion.consts import BOARDS, IMAGES, URL
 
 
@@ -214,7 +215,8 @@ class PyPiVersion(Version):
             info_version = data["info"]["version"]
             releases = data["releases"]
 
-            for version in sorted(releases, reverse=True):
+            for versionObject in sorted_pypi_versions(releases):
+                version = extract_version(versionObject)
                 if re.search(r"^(\\d+\\.)?(\\d\\.)?(\\*|\\d+)$", version):
                     continue
                 else:
@@ -294,3 +296,17 @@ class HaIoVersion(Version):
             )
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.critical("Something really wrong happened! - %s", error)
+
+
+def sorted_pypi_versions(response):
+    """Sort list of pypi versions."""
+    versions = [semantic_version.Version.coerce(version) for version in response]
+    return sorted(versions, reverse=True)
+
+
+def extract_version(versionObject):
+    """Extract version number from version object."""
+    version = [versionObject.major, versionObject.minor, versionObject.patch]
+    if versionObject.prerelease:
+        return ".".join([str(v) for v in version]) + str(versionObject.prerelease[0])
+    return ".".join([str(v) for v in version])

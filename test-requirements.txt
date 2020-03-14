@@ -1,5 +1,5 @@
 pytest
-aiohttp
+aiohttp>=3.6.1,<4.0
 pytest-asyncio
 pytest-runner
 aresponses
