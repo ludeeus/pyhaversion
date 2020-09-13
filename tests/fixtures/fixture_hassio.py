@@ -9,7 +9,7 @@ def hassio_response():
         "supervisor": "999",
         "homeassistant": {"default": "9.99.9"},
         "hassos": {"ova": "9.99"},
-        "hassos-cli": "9",
+        "cli": "9",
     }
 
 
@@ -20,7 +20,7 @@ def hassio_beta_response():
         "supervisor": "999",
         "homeassistant": {"default": "9.99.9"},
         "hassos": {"ova": "9.99"},
-        "hassos-cli": "9",
+        "cli": "9",
     }
 
 
@@ -31,7 +31,7 @@ def hassio_response_beta_week():
         "supervisor": "999",
         "homeassistant": {"default": "9.98.9"},
         "hassos": {"ova": "9.99"},
-        "hassos-cli": "9",
+        "cli": "9",
     }
 
 
@@ -42,5 +42,5 @@ def hassio_beta_response_beta_week():
         "supervisor": "999",
         "homeassistant": {"default": "9.99.9b0"},
         "hassos": {"ova": "9.99"},
-        "hassos-cli": "9",
+        "cli": "9",
     }

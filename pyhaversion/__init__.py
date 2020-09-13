@@ -167,9 +167,9 @@ class HassioVersion(Version):
 
                 self._version = data["homeassistant"][IMAGES[self.image]["hassio"]]
 
-                self._version_data["hassos"] = data["hassos"][board]
-                self._version_data["supervisor"] = data["supervisor"]
-                self._version_data["hassos-cli"] = data["hassos-cli"]
+                self._version_data["hassos"] = data.get("hassos", {}).get(board)
+                self._version_data["supervisor"] = data.get("supervisor")
+                self._version_data["cli"] = data.get("cli")
 
             _LOGGER.debug("Version: %s", self.version)
             _LOGGER.debug("Version data: %s", self.version_data)
