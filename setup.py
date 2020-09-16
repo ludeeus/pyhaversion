@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
     LONG = fh.read()
 setuptools.setup(
     name="pyhaversion",
-    version="3.4.0",
+    version="3.4.1",
     author="Joakim Sorensen",
     author_email="hi@ludeeus.dev",
     description="",
@@ -18,7 +18,7 @@ setuptools.setup(
     ],
     long_description_content_type="text/markdown",
     url="https://github.com/ludeeus/pyhaversion",
-    packages=setuptools.find_packages(exclude=['tests','tests.*']),
+    packages=setuptools.find_packages(exclude=["tests", "tests.*"]),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
