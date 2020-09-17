@@ -301,7 +301,16 @@ class HaIoVersion(Version):
 def sorted_pypi_versions(response):
     """Sort list of pypi versions."""
     versions = [semantic_version.Version.coerce(version) for version in response]
-    return sorted(versions, reverse=True)
+    return sorted(
+        versions,
+        reverse=True,
+        key=lambda k: (
+            k.major,
+            k.minor,
+            k.patch,
+            int(0 if not k.prerelease else re.sub(r"[a-z]", "", k.prerelease[0])),
+        ),
+    )
 
 
 def extract_version(versionObject):

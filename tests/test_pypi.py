@@ -86,4 +86,4 @@ async def test_beta_version_beta_week(aresponses, event_loop, pypi_response_beta
     async with aiohttp.ClientSession(loop=event_loop) as session:
         haversion = PyPiVersion(event_loop, session, "beta")
         await haversion.get_version()
-        assert haversion.version == BETA_VERSION_BETA_WEEK
+        assert haversion.version == "9.99.9b12"

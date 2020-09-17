@@ -1,18 +1,14 @@
-// See https://aka.ms/vscode-remote/devcontainer.json for format details.
 {
 	"name": "pyhaversion",
 	"context": "..",
 	"image": "ludeeus/devcontainer:integration",
 	"postCreateCommand": "python3 setup.py develop",
-	"runArgs": [
-		"-v",
-		"${env:HOME}${env:USERPROFILE}/.ssh:/tmp/.ssh" // This is added so you can push from inside the container
-	],
 	"extensions": [
 		"ms-python.python",
 		"github.vscode-pull-request-github",
 		"ryanluker.vscode-coverage-gutters",
-		"tabnine.tabnine-vscode"
+		"tabnine.tabnine-vscode",
+		"ms-python.vscode-pylance"
 	],
 	"settings": {
 		"files.eol": "\n",
