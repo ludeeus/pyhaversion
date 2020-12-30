@@ -1,16 +1,13 @@
 """Tests for ha.io/version.json."""
-from pyhaversion import HaVersion
-from pyhaversion.exceptions import HaVersionInputException
-from tests.common import fixture
-from pyhaversion.consts import HaVersionSource
-
 import aiohttp
 import pytest
 
-from .const import (
-    HEADERS,
-    STABLE_VERSION,
-)
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionSource
+from pyhaversion.exceptions import HaVersionInputException
+from tests.common import fixture
+
+from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio

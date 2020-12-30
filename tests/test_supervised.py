@@ -1,17 +1,15 @@
 """Tests for Hassio."""
-from pyhaversion import HaVersion
-from pyhaversion.exceptions import HaVersionInputException
 from unittest.mock import patch
-from tests.common import fixture
-from pyhaversion.consts import HaVersionChannel, HaVersionSource
 
 import aiohttp
 import pytest
 
-from .const import (
-    HEADERS,
-    STABLE_VERSION,
-)
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionChannel, HaVersionSource
+from pyhaversion.exceptions import HaVersionInputException
+from tests.common import fixture
+
+from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio

@@ -1,8 +1,8 @@
 """pyhaversion package."""
 import asyncio
 from typing import List
-import async_timeout
 
+import async_timeout
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase

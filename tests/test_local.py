@@ -1,14 +1,13 @@
 """Tests for ha.io/version.json."""
-from pyhaversion import HaVersion
 from unittest.mock import patch
-from pyhaversion.consts import HaVersionSource
 
 import aiohttp
 import pytest
 
-from .const import (
-    STABLE_VERSION,
-)
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionSource
+
+from .const import STABLE_VERSION
 
 
 @pytest.mark.asyncio

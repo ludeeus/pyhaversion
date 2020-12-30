@@ -1,5 +1,6 @@
 """pyhaversion package."""
 import asyncio
+
 import async_timeout
 
 from .base import HaVersionBase

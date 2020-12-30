@@ -1,5 +1,5 @@
-import os
 import json
+import os
 
 
 def fixture(filename, asjson=True):

@@ -1,10 +1,12 @@
 import asyncio
 from socket import gaierror
-from aiohttp import ClientError
-from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
-from pyhaversion import HaVersion
 from unittest.mock import patch
+
 import pytest
+from aiohttp import ClientError
+
+from pyhaversion import HaVersion
+from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
 
 
 @pytest.mark.asyncio

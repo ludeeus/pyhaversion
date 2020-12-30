@@ -1,20 +1,20 @@
 import asyncio
 import logging
-from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
-
 from socket import gaierror
 from typing import Tuple
 
 from aiohttp import ClientError, ClientSession
 from awesomeversion import AwesomeVersion
 
+from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
+
 from .base import HaVersionBase
 from .consts import DEFAULT_TIMEOUT, HaVersionBoard, HaVersionChannel, HaVersionSource
-from .local import HaVersionLocal
-from .supervised import HaVersionSupervised
 from .docker import HaVersionDocker
 from .haio import HaVersionHaio
+from .local import HaVersionLocal
 from .pypi import HaVersionPypi
+from .supervised import HaVersionSupervised
 
 _LOGGER = logging.getLogger(__package__)
 

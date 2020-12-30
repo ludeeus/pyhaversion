@@ -1,6 +1,7 @@
-import pytest
 import logging
 from unittest.mock import patch
+
+import pytest
 
 from pyhaversion import HaVersion as PyHaVersion
 

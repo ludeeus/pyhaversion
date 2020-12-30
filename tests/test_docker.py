@@ -1,15 +1,15 @@
 """Tests for Docker."""
 
 import json
-from pyhaversion.exceptions import HaVersionInputException
 from unittest.mock import patch
-from tests.common import fixture
-from pyhaversion.consts import HaVersionChannel, HaVersionSource
 
 import aiohttp
 import pytest
 
 from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionChannel, HaVersionSource
+from pyhaversion.exceptions import HaVersionInputException
+from tests.common import fixture
 
 from .const import (
     BETA_VERSION,

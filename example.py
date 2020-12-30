@@ -1,10 +1,11 @@
 """Example usage of pyhaversion."""
 import asyncio
-from pyhaversion.consts import HaVersionBoard, HaVersionChannel, HaVersionSource
 
 import aiohttp
 
 from pyhaversion import HaVersion
+from pyhaversion.consts import (HaVersionBoard, HaVersionChannel,
+                                HaVersionSource)
 
 
 async def example():

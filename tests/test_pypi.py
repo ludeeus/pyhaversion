@@ -1,19 +1,15 @@
 """Tests for PyPi."""
-from pyhaversion import HaVersion
-from pyhaversion.exceptions import HaVersionInputException
-from pyhaversion.consts import HaVersionChannel, HaVersionSource
 from unittest.mock import patch
-from tests.common import fixture
 
 import aiohttp
 import pytest
 
-from .const import (
-    BETA_VERSION,
-    HEADERS,
-    STABLE_VERSION,
-    STABLE_VERSION_BETA_WEEK,
-)
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionChannel, HaVersionSource
+from pyhaversion.exceptions import HaVersionInputException
+from tests.common import fixture
+
+from .const import BETA_VERSION, HEADERS, STABLE_VERSION, STABLE_VERSION_BETA_WEEK
 
 
 @pytest.mark.asyncio

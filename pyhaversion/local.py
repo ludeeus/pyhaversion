@@ -1,5 +1,6 @@
 """HaVersionLocal class."""
 import logging
+
 from .base import HaVersionBase
 
 _LOGGER = logging.getLogger(__package__)
