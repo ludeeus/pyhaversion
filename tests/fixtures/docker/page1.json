@@ -1,0 +1,17 @@
+{
+    "next": "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assistant/tags/page2",
+    "results": [
+        {
+            "name": "dev"
+        },
+        {
+            "name": "latest"
+        },
+        {
+            "name": "rc"
+        },
+        {
+            "name": "beta"
+        }
+    ]
+}

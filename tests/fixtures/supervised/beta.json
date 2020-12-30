@@ -1,0 +1,10 @@
+{
+    "supervisor": "999",
+    "homeassistant": {
+        "default": "2020.99.9b0"
+    },
+    "hassos": {
+        "ova": "9.99"
+    },
+    "cli": "9"
+}

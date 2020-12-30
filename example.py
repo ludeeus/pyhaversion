@@ -1,22 +1,34 @@
 """Example usage of pyhaversion."""
 import asyncio
+from pyhaversion.consts import HaVersionBoard, HaVersionChannel, HaVersionSource
+
 import aiohttp
 
-# from pyhaversion import HassioVersion
-from pyhaversion import PyPiVersion
+from pyhaversion import HaVersion
 
 
-async def test():
+async def example():
     """Example usage of pyhaversion."""
     async with aiohttp.ClientSession() as session:
-        # data = HassioVersion(loop, branch="beta", session=session, image="raspberrypi4")
-        # data = PyPiVersion(loop, branch="beta", session=session)
-        data = PyPiVersion(loop, session=session)
-        await data.get_version()
-
-        print("Version:", data.version)
-        print("Attributes:", data.version_data)
+        sources = [
+            HaVersionSource.DEFAULT,
+            HaVersionSource.DOCKER,
+            HaVersionSource.SUPERVISED,
+            HaVersionSource.HAIO,
+            HaVersionSource.PYPI,
+        ]
+        for source in sources:
+            version, data = await HaVersion(
+                session=session,
+                source=source,
+                channel=HaVersionChannel.DEFAULT,
+                board=HaVersionBoard.DEFAULT,
+            ).get_version()
+            print(source)
+            print("Version:", version)
+            print("Version data:", data)
+            print()
 
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(test())
+loop.run_until_complete(example())
