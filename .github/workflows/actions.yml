@@ -89,3 +89,22 @@ jobs:
           name: ${{ steps.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  test-install:
+    name: Test install with Python ${{ matrix.python-version }}
+    needs: [lint, test]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.8, 3.9, "3.10.0-alpha - 3.10.0"]
+    steps:
+      - name: 📥 Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: 🛠️ Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 📦 Install dependencies
+        run:  python3 setup.py install
