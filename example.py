@@ -11,7 +11,6 @@ async def example():
     """Example usage of pyhaversion."""
     async with aiohttp.ClientSession() as session:
         sources = [
-            HaVersionSource.DEFAULT,
             HaVersionSource.DOCKER,
             HaVersionSource.SUPERVISED,
             HaVersionSource.HAIO,
