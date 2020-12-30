@@ -4,8 +4,7 @@ import asyncio
 import aiohttp
 
 from pyhaversion import HaVersion
-from pyhaversion.consts import (HaVersionBoard, HaVersionChannel,
-                                HaVersionSource)
+from pyhaversion.consts import HaVersionBoard, HaVersionChannel, HaVersionSource
 
 
 async def example():
