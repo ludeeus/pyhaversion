@@ -55,23 +55,18 @@ class HaVersion:
             self._handler = HaVersionLocal(**handler_args)
 
     @property
-    def handler(self) -> HaVersionBase:
-        """Return the requested handler."""
-        return self._handler
-
-    @property
     def version(self) -> AwesomeVersion:
         """Return the version."""
-        return self.handler.version
+        return self._handler.version
 
     @property
     def version_data(self) -> dict:
         """Return extended version data for supported sources."""
-        return self.handler.version_data
+        return self._handler.version_data
 
     async def get_version(self) -> Tuple[AwesomeVersion, dict]:
         try:
-            await self.handler.fetch()
+            await self._handler.fetch()
         except asyncio.TimeoutError as exception:
             _LOGGER.error(
                 "Timeout of %s seconds was reached while fetching version for %s",
@@ -86,7 +81,7 @@ class HaVersion:
             )
 
         try:
-            self.handler.parse()
+            self._handler.parse()
         except (KeyError, TypeError) as exception:
             _LOGGER.error(
                 "Error parsing version information for %s, %s",
