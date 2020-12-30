@@ -1,5 +1,5 @@
 """Tests for ha.io/version.json."""
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 import aiohttp
 import pytest
@@ -13,9 +13,8 @@ from .const import STABLE_VERSION
 @pytest.mark.asyncio
 async def test_local():
     """Test ha.io/version.json stable."""
-    with patch(
-        "homeassistant.const.__version__",
-        STABLE_VERSION,
+    with patch.dict(
+        "sys.modules", {"homeassistant.const": MagicMock(__version__=STABLE_VERSION)}
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(session=session, source=HaVersionSource.LOCAL)

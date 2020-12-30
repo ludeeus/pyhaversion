@@ -74,7 +74,7 @@ class HaVersion:
                 f"Timeout of {self.timeout} seconds was reached while fetching version for {self.source}"
             ) from exception
 
-        except (ClientError, gaierror, ImportError) as exception:
+        except (ClientError, gaierror, ImportError, ModuleNotFoundError) as exception:
             raise HaVersionFetchException(
                 f"Error fetching version information from {self.source} {exception}"
             ) from exception
