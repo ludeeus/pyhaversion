@@ -17,9 +17,9 @@ setup(
         "Programming Language :: Python :: 3.10",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
-    description="A python package to the newest version number of Home Assistant.",
+    description="Get the latest Home Assistant version from various sources.",
     install_requires=[
-        "aiohttp",
+        "aiohttp>=3.6.1,<4.0",
         "async_timeout<=3.0.1",
         "awesomeversion>=20.12.4",
     ],

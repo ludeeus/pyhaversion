@@ -106,5 +106,5 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: 📦 Install dependencies
+      - name: 🏃 Run setup
         run:  python3 setup.py install
