@@ -108,3 +108,6 @@ jobs:
 
       - name: 🏃 Run setup
         run:  python3 setup.py install
+
+      - name: 🏃 Run example
+        run:  python3 example.py
