@@ -92,7 +92,7 @@ jobs:
 
   test-install:
     name: Test install with Python ${{ matrix.python-version }}
-    needs: [lint, test]
+    needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
