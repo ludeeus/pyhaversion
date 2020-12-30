@@ -59,16 +59,20 @@ async def test_fetch_exception():
 async def test_parse_exception():
     haversion = HaVersion()
 
+    async def mocked_fetch(_args):
+        pass
+
     def mocked_parse_KeyError(_args):
         raise KeyError
 
     def mocked_parse_TypeError(_args):
         raise TypeError
 
-    with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_KeyError):
-        with pytest.raises(HaVersionParseException):
-            await haversion.get_version()
+    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch):
+        with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_KeyError):
+            with pytest.raises(HaVersionParseException):
+                await haversion.get_version()
 
-    with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_TypeError):
-        with pytest.raises(HaVersionParseException):
-            await haversion.get_version()
+        with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_TypeError):
+            with pytest.raises(HaVersionParseException):
+                await haversion.get_version()
