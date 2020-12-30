@@ -1,33 +1,33 @@
 """Tests for ha.io/version.json."""
-
-import json
-
 import aiohttp
 import pytest
-from pyhaversion import HaIoVersion
-from .const import (
-    HEADERS,
-    STABLE_VERSION,
-    STABLE_VERSION_BETA_WEEK,
-    BETA_VERSION,
-    BETA_VERSION_BETA_WEEK,
-)
-from .fixtures.fixture_haio import haio_response
+
+from pyhaversion import HaVersion
+from pyhaversion.consts import HaVersionSource
+from pyhaversion.exceptions import HaVersionInputException
+from tests.common import fixture
+
+from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_haio(aresponses, event_loop, haio_response):
+async def test_haio(aresponses):
     """Test ha.io/version.json stable."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",
         "get",
         aresponses.Response(
-            text=json.dumps(haio_response), status=200, headers=HEADERS
+            text=fixture("haio/default", False), status=200, headers=HEADERS
         ),
     )
-
-    async with aiohttp.ClientSession(loop=event_loop) as session:
-        haversion = HaIoVersion(event_loop, session)
+    async with aiohttp.ClientSession() as session:
+        haversion = HaVersion(session=session, source=HaVersionSource.HAIO)
         await haversion.get_version()
         assert haversion.version == STABLE_VERSION
+
+
+@pytest.mark.asyncio
+async def test_input_exception(HaVersion):
+    with pytest.raises(HaVersionInputException):
+        HaVersion(source=HaVersionSource.HAIO)

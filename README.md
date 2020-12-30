@@ -1,33 +1,30 @@
-# pyhaversion [![Build Status](https://travis-ci.com/ludeeus/pyhaversion.svg?branch=master)](https://travis-ci.com/ludeeus/pyhaversion)
+# pyhaversion
 
-_A python module to the newest version number of Home Assistant._
+[![codecov](https://codecov.io/gh/ludeeus/pyhaversion/branch/main/graph/badge.svg)](https://codecov.io/gh/ludeeus/pyhaversion)
+![python version](https://img.shields.io/badge/Python-3.8=><=3.10-blue.svg)
+[![PyPI](https://img.shields.io/pypi/v/pyhaversion)](https://pypi.org/project/pyhaversion)
+![Actions](https://github.com/ludeeus/pyhaversion/workflows/Actions/badge.svg?branch=master)
 
-## Install
+_A python package to the newest version number of Home Assistant._
+
+## Installation
 
 ```bash
-pip install pyhaversion
+python3 -m pip install pyhaversion
 ```
 
 Look at the file `example.py` for a usage example.
 
 
-## Valid options for branch
+## Contribute
 
-- stable
-- beta
+**All** contributions are welcome!
 
-## Optional valid options for image (hassio)
-
-- default
-- qemux86
-- qemux86-64
-- qemuarm
-- qemuarm-64
-- intel-nuc
-- raspberrypi
-- raspberrypi2
-- raspberrypi3
-- raspberrypi3-64
-- raspberrypi4
-- raspberrypi4-64
-- tinker
+1. Fork the repository
+2. Clone the repository locally and open the devcontainer or use GitHub codespaces
+3. Do your changes
+4. Lint the files with `make black`
+5. Ensure all tests passes with `make test`
+6. Ensure 100% coverage with `make coverage`
+7. Commit your work, and push it to GitHub
+8. Create a PR against the `main` branch

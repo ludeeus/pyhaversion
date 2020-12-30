@@ -9,3 +9,7 @@ pyvenv.cfg
 *egg-info*
 RESPONSES
 .vscode/settings.json
+coverage.xml
+build
+dist
+.coverage
