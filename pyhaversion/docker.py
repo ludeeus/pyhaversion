@@ -61,12 +61,10 @@ class HaVersionDocker(HaVersionBase):
                 if self.channel == HaVersionChannel.DEV:
                     self._version = version
                     break
-                continue
             elif version.beta:
                 if self.channel == HaVersionChannel.BETA:
                     self._version = version
                     break
-                continue
-            else:
+            elif self.channel == HaVersionChannel.STABLE:
                 self._version = version
                 break

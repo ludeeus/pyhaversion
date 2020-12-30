@@ -1,4 +1,5 @@
 """Tests for ha.io/version.json."""
+from pyhaversion import HaVersion
 from unittest.mock import patch
 from pyhaversion.consts import HaVersionSource
 
@@ -11,10 +12,10 @@ from .const import (
 
 
 @pytest.mark.asyncio
-async def test_local(HaVersion):
+async def test_local():
     """Test ha.io/version.json stable."""
     with patch(
-        "pyhaversion.local.HaVersionLocal.data",
+        "homeassistant.const.__version__",
         STABLE_VERSION,
     ):
         async with aiohttp.ClientSession() as session:

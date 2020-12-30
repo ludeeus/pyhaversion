@@ -1,4 +1,6 @@
 """Tests for PyPi."""
+from pyhaversion import HaVersion
+from pyhaversion.exceptions import HaVersionInputException
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
 from unittest.mock import patch
 from tests.common import fixture
@@ -8,6 +10,7 @@ import pytest
 
 from .const import (
     BETA_VERSION,
+    HEADERS,
     STABLE_VERSION,
     STABLE_VERSION_BETA_WEEK,
 )
@@ -47,16 +50,26 @@ async def test_beta_version(HaVersion):
 
 
 @pytest.mark.asyncio
-async def test_stable_version_beta_week(HaVersion):
+async def test_stable_version_beta_week(aresponses):
     """Test pypi stable during beta week."""
-    with patch(
-        "pyhaversion.pypi.HaVersionPypi.data",
-        fixture("pypi/beta"),
-    ):
-        async with aiohttp.ClientSession() as session:
-            haversion = HaVersion(
-                session=session,
-                source=HaVersionSource.PYPI,
-            )
-            await haversion.get_version()
-            assert haversion.version == STABLE_VERSION_BETA_WEEK
+    aresponses.add(
+        "pypi.org",
+        "/pypi/homeassistant/json",
+        "get",
+        aresponses.Response(
+            text=fixture("pypi/beta", False), status=200, headers=HEADERS
+        ),
+    )
+    async with aiohttp.ClientSession() as session:
+        haversion = HaVersion(
+            session=session,
+            source=HaVersionSource.PYPI,
+        )
+        await haversion.get_version()
+        assert haversion.version == STABLE_VERSION_BETA_WEEK
+
+
+@pytest.mark.asyncio
+async def test_input_exception(HaVersion):
+    with pytest.raises(HaVersionInputException):
+        HaVersion(source=HaVersionSource.PYPI)

@@ -1,6 +1,7 @@
 """Tests for Docker."""
 
 import json
+from pyhaversion.exceptions import HaVersionInputException
 from unittest.mock import patch
 from tests.common import fixture
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
@@ -13,6 +14,7 @@ from pyhaversion import HaVersion
 from .const import (
     BETA_VERSION,
     BETA_VERSION_BETA_WEEK,
+    DEV_VERSION,
     HEADERS,
     STABLE_VERSION,
     STABLE_VERSION_BETA_WEEK,
@@ -46,7 +48,24 @@ async def test_beta_version(HaVersion):
                 channel=HaVersionChannel.BETA,
             )
             await haversion.get_version()
-            assert haversion.version == STABLE_VERSION
+            assert haversion.version == BETA_VERSION
+
+
+@pytest.mark.asyncio
+async def test_beta_version(HaVersion):
+    """Test docker beta."""
+    with patch(
+        "pyhaversion.docker.HaVersionDocker.data",
+        fixture("docker/default"),
+    ):
+        async with aiohttp.ClientSession() as session:
+            haversion = HaVersion(
+                session=session,
+                source=HaVersionSource.DOCKER,
+                channel=HaVersionChannel.DEV,
+            )
+            await haversion.get_version()
+            assert haversion.version == DEV_VERSION
 
 
 @pytest.mark.asyncio
@@ -136,7 +155,7 @@ async def test_beta_version_pagination(aresponses):
             channel=HaVersionChannel.BETA,
         )
         await haversion.get_version()
-        assert haversion.version == STABLE_VERSION
+        assert haversion.version == BETA_VERSION
 
 
 @pytest.mark.asyncio
@@ -204,3 +223,9 @@ async def test_beta_version_beta_week_pagination(aresponses):
         )
         await haversion.get_version()
         assert haversion.version == BETA_VERSION_BETA_WEEK
+
+
+@pytest.mark.asyncio
+async def test_input_exception(HaVersion):
+    with pytest.raises(HaVersionInputException):
+        HaVersion(source=HaVersionSource.DOCKER)

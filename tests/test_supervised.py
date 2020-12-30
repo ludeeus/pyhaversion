@@ -1,4 +1,6 @@
 """Tests for Hassio."""
+from pyhaversion import HaVersion
+from pyhaversion.exceptions import HaVersionInputException
 from unittest.mock import patch
 from tests.common import fixture
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
@@ -7,22 +9,26 @@ import aiohttp
 import pytest
 
 from .const import (
-    BETA_VERSION,
+    HEADERS,
     STABLE_VERSION,
 )
 
 
 @pytest.mark.asyncio
-async def test_stable_version(HaVersion):
+async def test_stable_version(aresponses):
     """Test hassio stable."""
-    with patch(
-        "pyhaversion.supervised.HaVersionSupervised.data",
-        fixture("supervised/default"),
-    ):
-        async with aiohttp.ClientSession() as session:
-            haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISED)
-            await haversion.get_version()
-            assert haversion.version == STABLE_VERSION
+    aresponses.add(
+        "version.home-assistant.io",
+        "/stable.json",
+        "get",
+        aresponses.Response(
+            text=fixture("supervised/default", False), status=200, headers=HEADERS
+        ),
+    )
+    async with aiohttp.ClientSession() as session:
+        haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISED)
+        await haversion.get_version()
+        assert haversion.version == STABLE_VERSION
 
 
 @pytest.mark.asyncio
@@ -40,3 +46,9 @@ async def test_beta_version(HaVersion):
             )
             await haversion.get_version()
             assert haversion.version == STABLE_VERSION
+
+
+@pytest.mark.asyncio
+async def test_input_exception(HaVersion):
+    with pytest.raises(HaVersionInputException):
+        HaVersion(source=HaVersionSource.SUPERVISED)

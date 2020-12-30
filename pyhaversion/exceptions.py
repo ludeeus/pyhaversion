@@ -6,4 +6,12 @@ class HaVersionException(Exception):
 
 
 class HaVersionInputException(HaVersionException):
-    """Base pyhaversion exception."""
+    """Raised when missing required input."""
+
+
+class HaVersionFetchException(HaVersionException):
+    """Raised there are issues fetching information."""
+
+
+class HaVersionParseException(HaVersionException):
+    """Raised there are issues parsing information."""

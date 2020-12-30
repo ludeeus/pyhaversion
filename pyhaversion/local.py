@@ -10,12 +10,9 @@ class HaVersionLocal(HaVersionBase):
 
     async def fetch(self):
         """Logic to fetch new version data."""
-        try:
-            from homeassistant.const import __version__ as localversion
+        from homeassistant.const import __version__ as localversion
 
-            self._data = localversion
-        except ImportError as error:
-            _LOGGER.critical("Home Assistant not found - %s", error)
+        self._data = localversion
 
     def parse(self):
         """Logic to parse new version data."""

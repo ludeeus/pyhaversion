@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
 
 from socket import gaierror
 from typing import Tuple
@@ -67,27 +68,24 @@ class HaVersion:
     async def get_version(self) -> Tuple[AwesomeVersion, dict]:
         try:
             await self._handler.fetch()
+
         except asyncio.TimeoutError as exception:
-            _LOGGER.error(
-                "Timeout of %s seconds was reached while fetching version for %s",
-                self.timeout,
-                self.source,
-            )
-        except (ClientError, gaierror) as exception:
-            _LOGGER.error(
-                "Error fetching version information from %s, %s",
-                self.source,
-                exception,
-            )
+            raise HaVersionFetchException(
+                f"Timeout of {self.timeout} seconds was reached while fetching version for {self.source}"
+            ) from exception
+
+        except (ClientError, gaierror, ImportError) as exception:
+            raise HaVersionFetchException(
+                f"Error fetching version information from {self.source} {exception}"
+            ) from exception
 
         try:
             self._handler.parse()
+
         except (KeyError, TypeError) as exception:
-            _LOGGER.error(
-                "Error parsing version information for %s, %s",
-                self.source,
-                exception,
-            )
+            raise HaVersionParseException(
+                f"Error parsing version information for {self.source} - {exception}"
+            ) from exception
 
         _LOGGER.debug("Version: %s", self.version)
         _LOGGER.debug("Version data: %s", self.version_data)
