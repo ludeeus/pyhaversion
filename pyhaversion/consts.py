@@ -56,6 +56,7 @@ class HaVersionChannel(str, Enum):
 class HaVersionBoard(str, Enum):
     """Boards for HaVersion."""
 
+    GENERIC_X86_64 = "generic-x86-64"
     INTEL_NUC = "intel-nuc"
     ODROID_C2 = "odroid-c2"
     ODROID_C4 = "odroid-c4"
