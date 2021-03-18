@@ -12,8 +12,10 @@ from .exceptions import HaVersionInputException
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tags"
 IMAGES = {
     "default": "home-assistant",
+    "generic-x86-64": "generic-x86-64-homeassistant",
     "intel-nuc": "intel-nuc-homeassistant",
     "odroid-c2": "odroid-c2-homeassistant",
+    "odroid-c4": "odroid-c4-homeassistant",
     "odroid-n2": "odroid-n2-homeassistant",
     "odroid-xu": "odroid-xu-homeassistant",
     "qemuarm-64": "qemuarm-64-homeassistant",
