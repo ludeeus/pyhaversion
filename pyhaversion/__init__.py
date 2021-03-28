@@ -1,3 +1,3 @@
 """pyhaversion package."""
-from .consts import HaVersionBoard, HaVersionChannel, HaVersionSource
+from .consts import HaVersionChannel, HaVersionSource
 from .version import HaVersion

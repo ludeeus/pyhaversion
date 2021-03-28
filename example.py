@@ -4,15 +4,15 @@ import asyncio
 import aiohttp
 
 from pyhaversion import HaVersion
-from pyhaversion.consts import HaVersionBoard, HaVersionChannel, HaVersionSource
+from pyhaversion.consts import HaVersionChannel, HaVersionSource
 
 
 async def example():
     """Example usage of pyhaversion."""
     async with aiohttp.ClientSession() as session:
         sources = [
-            HaVersionSource.DOCKER,
-            HaVersionSource.SUPERVISED,
+            HaVersionSource.CONTAINER,
+            HaVersionSource.SUPERVISOR,
             HaVersionSource.HAIO,
             HaVersionSource.PYPI,
         ]
@@ -20,8 +20,8 @@ async def example():
             version, data = await HaVersion(
                 session=session,
                 source=source,
+                board="generic-x86-64",
                 channel=HaVersionChannel.DEFAULT,
-                board=HaVersionBoard.DEFAULT,
             ).get_version()
             print(source)
             print("Version:", version)
