@@ -21,7 +21,7 @@ setup(
     install_requires=[
         "aiohttp>=3.6.1,<4.0",
         "async_timeout<=3.0.1",
-        "awesomeversion>=20.12.4",
+        "awesomeversion>=21.2.3",
     ],
     keywords=["homeassistant", "version", "update"],
     license="MIT license",
