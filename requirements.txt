@@ -7,4 +7,4 @@ black==20.8b1
 pre-commit==2.10.1
 pytest-cov==2.11.1
 pytest==6.2.2
-awesomeversion>=20.12.4
+awesomeversion>=21.2.3

@@ -16,14 +16,17 @@ from .consts import (
     DATA_OBSERVER,
     DATA_OS,
     DATA_SUPERVISOR,
+    DEFAULT_BOARD,
     DEFAULT_HEADERS,
+    DEFAULT_IMAGE,
+    LOGGER,
 )
 from .exceptions import HaVersionInputException
 
 URL = "https://version.home-assistant.io/{channel}.json"
 
 
-class HaVersionSupervised(HaVersionBase):
+class HaVersionSupervisor(HaVersionBase):
     """Handle versions for the Supervisor source."""
 
     def validate_input(self) -> None:
@@ -43,7 +46,21 @@ class HaVersionSupervised(HaVersionBase):
 
     def parse(self):
         """Logic to parse new version data."""
+        if self.image != DEFAULT_IMAGE and self.image not in self.data.get(
+            DATA_HOMEASSISTANT, {}
+        ):
+            LOGGER.warning(
+                "Image '%s' not found, using default '%s'", self.image, DEFAULT_IMAGE
+            )
+            self.image = DEFAULT_IMAGE
         self._version = self.data.get(DATA_HOMEASSISTANT, {}).get(self.image)
+        if self.board != DEFAULT_BOARD and self.board not in self.data.get(
+            DATA_HASSOS, {}
+        ):
+            LOGGER.warning(
+                "Board '%s' not found, using default '%s'", self.board, DEFAULT_BOARD
+            )
+            self.board = DEFAULT_BOARD
         self._version_data = {
             DATA_AUDIO: self.data.get(DATA_AUDIO),
             DATA_BOARD: self.board,

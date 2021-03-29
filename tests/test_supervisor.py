@@ -20,11 +20,11 @@ async def test_stable_version(aresponses):
         "/stable.json",
         "get",
         aresponses.Response(
-            text=fixture("supervised/default", False), status=200, headers=HEADERS
+            text=fixture("supervisor/default", False), status=200, headers=HEADERS
         ),
     )
     async with aiohttp.ClientSession() as session:
-        haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISED)
+        haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISOR)
         await haversion.get_version()
         assert haversion.version == STABLE_VERSION
 
@@ -33,14 +33,16 @@ async def test_stable_version(aresponses):
 async def test_beta_version(HaVersion):
     """Test hassio beta."""
     with patch(
-        "pyhaversion.supervised.HaVersionSupervised.data",
-        fixture("supervised/default"),
+        "pyhaversion.supervisor.HaVersionSupervisor.data",
+        fixture("supervisor/default"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
                 session=session,
-                source=HaVersionSource.SUPERVISED,
+                source=HaVersionSource.SUPERVISOR,
                 channel=HaVersionChannel.BETA,
+                board="test",
+                image="test",
             )
             await haversion.get_version()
             assert haversion.version == STABLE_VERSION
@@ -49,4 +51,4 @@ async def test_beta_version(HaVersion):
 @pytest.mark.asyncio
 async def test_input_exception(HaVersion):
     with pytest.raises(HaVersionInputException):
-        HaVersion(source=HaVersionSource.SUPERVISED)
+        HaVersion(source=HaVersionSource.SUPERVISOR)

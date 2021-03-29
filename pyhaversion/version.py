@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from socket import gaierror
 from typing import Tuple
 
@@ -9,23 +8,27 @@ from awesomeversion import AwesomeVersion
 from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
 
 from .base import HaVersionBase
-from .consts import DEFAULT_TIMEOUT, HaVersionBoard, HaVersionChannel, HaVersionSource
-from .docker import HaVersionDocker
+from .consts import (
+    DEFAULT_BOARD,
+    DEFAULT_TIMEOUT,
+    LOGGER,
+    HaVersionChannel,
+    HaVersionSource,
+)
+from .container import HaVersionContainer
 from .haio import HaVersionHaio
 from .local import HaVersionLocal
 from .pypi import HaVersionPypi
-from .supervised import HaVersionSupervised
-
-_LOGGER = logging.getLogger(__package__)
+from .supervisor import HaVersionSupervisor
 
 
-class HaVersion:
+class HaVersion(HaVersionBase):
     def __init__(
         self,
         session: ClientSession = None,
         source: HaVersionSource = HaVersionSource.DEFAULT,
         channel: HaVersionChannel = HaVersionChannel.DEFAULT,
-        board: HaVersionBoard = HaVersionBoard.DEFAULT,
+        board: str = DEFAULT_BOARD,
         image: str = None,
         timeout: int = DEFAULT_TIMEOUT,
     ):
@@ -44,12 +47,12 @@ class HaVersion:
             "source": source,
             "timeout": timeout,
         }
-        if self.source == HaVersionSource.DOCKER:
-            self._handler = HaVersionDocker(**handler_args)
+        if self.source == HaVersionSource.CONTAINER:
+            self._handler = HaVersionContainer(**handler_args)
         elif self.source == HaVersionSource.PYPI:
             self._handler = HaVersionPypi(**handler_args)
-        elif self.source == HaVersionSource.SUPERVISED:
-            self._handler = HaVersionSupervised(**handler_args)
+        elif self.source == HaVersionSource.SUPERVISOR:
+            self._handler = HaVersionSupervisor(**handler_args)
         elif self.source == HaVersionSource.HAIO:
             self._handler = HaVersionHaio(**handler_args)
         else:
@@ -87,6 +90,6 @@ class HaVersion:
                 f"Error parsing version information for {self.source} - {exception}"
             ) from exception
 
-        _LOGGER.debug("Version: %s", self.version)
-        _LOGGER.debug("Version data: %s", self.version_data)
+        LOGGER.debug("Version: %s", self.version)
+        LOGGER.debug("Version data: %s", self.version_data)
         return self.version, self.version_data

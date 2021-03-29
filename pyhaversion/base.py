@@ -4,8 +4,8 @@ from awesomeversion import AwesomeVersion
 from .consts import (
     DATA_CHANNEL,
     DATA_SOURCE,
+    DEFAULT_BOARD,
     DEFAULT_TIMEOUT,
-    HaVersionBoard,
     HaVersionChannel,
     HaVersionSource,
 )
@@ -17,7 +17,7 @@ class HaVersionBase:
         session: aiohttp.ClientSession = None,
         source: HaVersionSource = HaVersionSource.DEFAULT,
         channel: HaVersionChannel = HaVersionChannel.DEFAULT,
-        board: HaVersionBoard = HaVersionBoard.DEFAULT,
+        board: str = DEFAULT_BOARD,
         timeout: int = DEFAULT_TIMEOUT,
         image: str = None,
     ) -> None:
