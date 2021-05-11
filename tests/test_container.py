@@ -39,7 +39,7 @@ async def test_beta_version(HaVersion):
     """Test container beta."""
     with patch(
         "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/default"),
+        fixture("container/beta_week"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
@@ -137,7 +137,9 @@ async def test_beta_version_pagination(aresponses):
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
         aresponses.Response(
-            text=fixture("container/page1", False), status=200, headers=HEADERS
+            text=fixture("container/beta_week_page1", False),
+            status=200,
+            headers=HEADERS,
         ),
     )
     aresponses.add(
@@ -145,7 +147,9 @@ async def test_beta_version_pagination(aresponses):
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
         aresponses.Response(
-            text=fixture("container/page2", False), status=200, headers=HEADERS
+            text=fixture("container/beta_week_page2", False),
+            status=200,
+            headers=HEADERS,
         ),
     )
     async with aiohttp.ClientSession() as session:
