@@ -47,6 +47,6 @@ class HaVersionContainer(HaVersionBase):
                 if self.channel == HaVersionChannel.BETA:
                     self._version = version
                     break
-            elif self.channel == HaVersionChannel.STABLE:
+            else:
                 self._version = version
                 break
