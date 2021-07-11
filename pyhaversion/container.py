@@ -2,11 +2,10 @@
 import asyncio
 
 import async_timeout
-from attr import dataclass
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
-from .consts import DEFAULT_HEADERS, HaVersionChannel, DEFAULT_IMAGE
+from .consts import DEFAULT_HEADERS, DEFAULT_IMAGE, HaVersionChannel
 from .exceptions import HaVersionInputException
 
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tags"
@@ -35,10 +34,13 @@ class HaVersionContainer(HaVersionBase):
     def parse(self):
         """Logic to parse new version data."""
         for image in self.data["results"]:
-            if not image["name"].startswith("2"):
+            version = image["name"]
+            if not version.startswith("2"):
+                continue
+            if not len(version.split(".")) >= 3:
                 continue
 
-            version = AwesomeVersion(image["name"])
+            version = AwesomeVersion(version)
             if version.dev:
                 if self.channel == HaVersionChannel.DEV:
                     self._version = version
