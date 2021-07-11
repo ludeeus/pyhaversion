@@ -35,10 +35,13 @@ class HaVersionContainer(HaVersionBase):
     def parse(self):
         """Logic to parse new version data."""
         for image in self.data["results"]:
-            if not image["name"].startswith("2"):
+            version = image["name"]
+            if not version.startswith("2"):
+                continue
+            if not len(version.split(".")) >= 3:
                 continue
 
-            version = AwesomeVersion(image["name"])
+            version = AwesomeVersion(version)
             if version.dev:
                 if self.channel == HaVersionChannel.DEV:
                     self._version = version
