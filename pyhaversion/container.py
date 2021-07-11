@@ -2,11 +2,10 @@
 import asyncio
 
 import async_timeout
-from attr import dataclass
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
-from .consts import DEFAULT_HEADERS, HaVersionChannel, DEFAULT_IMAGE
+from .consts import DEFAULT_HEADERS, DEFAULT_IMAGE, HaVersionChannel
 from .exceptions import HaVersionInputException
 
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tags"
