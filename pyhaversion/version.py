@@ -1,11 +1,12 @@
+"""Get the latest Home Assistant version from various sources."""
+from __future__ import annotations
+
 import asyncio
 from socket import gaierror
-from typing import Tuple
+from typing import Any
 
 from aiohttp import ClientError, ClientSession
 from awesomeversion import AwesomeVersion
-
-from pyhaversion.exceptions import HaVersionFetchException, HaVersionParseException
 
 from .base import HaVersionBase
 from .consts import (
@@ -16,47 +17,47 @@ from .consts import (
     HaVersionSource,
 )
 from .container import HaVersionContainer
+from .exceptions import HaVersionFetchException, HaVersionParseException
 from .haio import HaVersionHaio
 from .local import HaVersionLocal
 from .pypi import HaVersionPypi
 from .supervisor import HaVersionSupervisor
 
+_HANDLERS: dict[HaVersionSource, HaVersionBase] = {
+    HaVersionSource.CONTAINER: HaVersionContainer,
+    HaVersionSource.PYPI: HaVersionPypi,
+    HaVersionSource.SUPERVISOR: HaVersionSupervisor,
+    HaVersionSource.HAIO: HaVersionHaio,
+    HaVersionSource.LOCAL: HaVersionLocal,
+    HaVersionSource.DEFAULT: HaVersionLocal,
+}
 
-class HaVersion(HaVersionBase):
+
+class HaVersion:
+    """Haversion client class."""
+
     def __init__(
         self,
-        session: ClientSession = None,
+        session: ClientSession | None = None,
         source: HaVersionSource = HaVersionSource.DEFAULT,
         channel: HaVersionChannel = HaVersionChannel.DEFAULT,
         board: str = DEFAULT_BOARD,
-        image: str = None,
+        image: str | None = None,
         timeout: int = DEFAULT_TIMEOUT,
     ):
-        self.board = board
-        self.channel = channel
-        self.session = session
-        self.source = source
-        self.image = image
-        self.timeout = timeout
+        """Initialize the client."""
+        self._handler = _HANDLERS[source](
+            channel=channel,
+            board=board,
+            image=image,
+            timeout=timeout,
+            session=session,
+        )
 
-        handler_args = {
-            "board": board,
-            "channel": channel,
-            "session": session,
-            "image": image,
-            "source": source,
-            "timeout": timeout,
-        }
-        if self.source == HaVersionSource.CONTAINER:
-            self._handler = HaVersionContainer(**handler_args)
-        elif self.source == HaVersionSource.PYPI:
-            self._handler = HaVersionPypi(**handler_args)
-        elif self.source == HaVersionSource.SUPERVISOR:
-            self._handler = HaVersionSupervisor(**handler_args)
-        elif self.source == HaVersionSource.HAIO:
-            self._handler = HaVersionHaio(**handler_args)
-        else:
-            self._handler = HaVersionLocal(**handler_args)
+    @property
+    def source(self) -> str:
+        """Return the source."""
+        return self._handler.source
 
     @property
     def version(self) -> AwesomeVersion:
@@ -64,17 +65,23 @@ class HaVersion(HaVersionBase):
         return self._handler.version
 
     @property
-    def version_data(self) -> dict:
+    def version_data(self) -> dict[str, Any]:
         """Return extended version data for supported sources."""
         return self._handler.version_data
 
-    async def get_version(self) -> Tuple[AwesomeVersion, dict]:
+    async def get_version(self) -> tuple[AwesomeVersion, dict[str, Any]]:
+        """
+        Get version update.
+
+        Returns a tupe with version, version_data.
+        """
         try:
             await self._handler.fetch()
 
         except asyncio.TimeoutError as exception:
             raise HaVersionFetchException(
-                f"Timeout of {self.timeout} seconds was reached while fetching version for {self.source}"
+                f"Timeout of {self._handler.timeout} seconds was "
+                f"reached while fetching version for {self.source}"
             ) from exception
 
         except (ClientError, gaierror, ImportError, ModuleNotFoundError) as exception:
@@ -84,8 +91,7 @@ class HaVersion(HaVersionBase):
 
         try:
             self._handler.parse()
-
-        except (KeyError, TypeError) as exception:
+        except (KeyError, TypeError, AttributeError) as exception:
             raise HaVersionParseException(
                 f"Error parsing version information for {self.source} - {exception}"
             ) from exception

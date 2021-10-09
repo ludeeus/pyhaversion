@@ -227,9 +227,3 @@ async def test_beta_version_beta_week_pagination(aresponses):
         )
         await haversion.get_version()
         assert haversion.version == BETA_VERSION_BETA_WEEK
-
-
-@pytest.mark.asyncio
-async def test_input_exception(HaVersion):
-    with pytest.raises(HaVersionInputException):
-        HaVersion(source=HaVersionSource.CONTAINER)

@@ -1,5 +1,6 @@
 """pyhaversion package."""
 import asyncio
+from dataclasses import dataclass
 
 import async_timeout
 
@@ -11,21 +12,19 @@ from .consts import (
     DATA_RELEASE_NOTES,
     DATA_RELEASE_TITLE,
     DEFAULT_HEADERS,
+    HaVersionSource,
 )
-from .exceptions import HaVersionInputException
 
 URL = "https://www.home-assistant.io/version.json"
 
 
+@dataclass
 class HaVersionHaio(HaVersionBase):
     """Handle versions for the home-assistant.io source."""
 
-    def validate_input(self) -> None:
-        """Raise HaVersionInputException if expected input are missing."""
-        if self.session is None:
-            raise HaVersionInputException("Missing aiohttp.ClientSession")
+    source = HaVersionSource.HAIO
 
-    async def fetch(self):
+    async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
         async with async_timeout.timeout(self.timeout, loop=asyncio.get_running_loop()):
             request = await self.session.get(url=URL, headers=DEFAULT_HEADERS)
