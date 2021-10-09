@@ -26,7 +26,7 @@ class HaVersionBase:
     board: str | None = None
     image: str | None = None
 
-    session: aiohttp.ClientSession | None = None
+    session: aiohttp.ClientSession | None = field(repr=False, default=None)
     timeout: int = field(repr=False, default=DEFAULT_TIMEOUT)
 
     _data: dict[str, Any] = field(repr=False, default_factory=dict)
