@@ -38,14 +38,13 @@ class HaVersionPypi(HaVersionBase):
 
         versions = sorted(
             [
-                version
+                AwesomeVersion(version)
                 for version in self.data.get(DATA_RELEASES, [])
                 if version.startswith("2")
             ],
             reverse=True,
         )
         for version in versions:
-            version = AwesomeVersion(version)
             if self.channel == HaVersionChannel.STABLE and version.beta:
                 continue
             self._version = version
