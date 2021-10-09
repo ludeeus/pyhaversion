@@ -1,13 +1,22 @@
 """HaVersionLocal class."""
+from dataclasses import dataclass
+
+from pyhaversion.consts import HaVersionSource
+
 from .base import HaVersionBase
 
 
+@dataclass
 class HaVersionLocal(HaVersionBase):
     """HaVersionLocal class."""
 
-    async def fetch(self):
+    source = HaVersionSource.LOCAL
+
+    async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
-        from homeassistant.const import __version__ as localversion
+        from homeassistant.const import (
+            __version__ as localversion,
+        )  # pylint: disable=import-error
 
         self._data = localversion
 
