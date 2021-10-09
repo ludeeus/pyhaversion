@@ -21,7 +21,7 @@ class HaVersionBase:
 
     source: HaVersionSource = HaVersionSource.DEFAULT
 
-    channel: HaVersionChannel = HaVersionChannel.STABLE
+    channel: HaVersionChannel = HaVersionChannel.DEFAULT
 
     board: str | None = None
     image: str | None = None
