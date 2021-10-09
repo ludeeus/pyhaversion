@@ -30,5 +30,5 @@ setup(
     packages=find_packages(include=["pyhaversion"]),
     python_requires=">=3.8.0",
     url="https://github.com/ludeeus/pyhaversion",
-    version="master",
+    version="main",
 )
