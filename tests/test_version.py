@@ -24,27 +24,11 @@ async def test_timeout_exception():
 async def test_fetch_exception():
     haversion = HaVersion()
 
-    async def mocked_fetch_ImportError(_args):
-        raise ImportError
-
-    async def mocked_fetch_ModuleNotFoundError(_args):
-        raise ModuleNotFoundError
-
     async def mocked_fetch_gaierror(_args):
         raise gaierror
 
     async def mocked_fetch_ClientError(_args):
         raise ClientError
-
-    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_ImportError):
-        with pytest.raises(HaVersionFetchException):
-            await haversion.get_version()
-
-    with patch(
-        "pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_ModuleNotFoundError
-    ):
-        with pytest.raises(HaVersionFetchException):
-            await haversion.get_version()
 
     with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_gaierror):
         with pytest.raises(HaVersionFetchException):

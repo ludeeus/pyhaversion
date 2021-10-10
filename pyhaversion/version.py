@@ -84,7 +84,7 @@ class HaVersion:
                 f"reached while fetching version for {self.source}"
             ) from exception
 
-        except (ClientError, gaierror, ImportError, ModuleNotFoundError) as exception:
+        except (ClientError, gaierror) as exception:
             raise HaVersionFetchException(
                 f"Error fetching version information from {self.source} {exception}"
             ) from exception
