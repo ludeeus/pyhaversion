@@ -4,6 +4,12 @@ from dataclasses import dataclass
 from pyhaversion.consts import HaVersionSource
 
 from .base import HaVersionBase
+from .consts import LOGGER
+
+try:
+    from homeassistant.const import __version__ as localversion
+except (ModuleNotFoundError, ImportError):
+    localversion = None
 
 
 @dataclass
@@ -14,10 +20,8 @@ class HaVersionLocal(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
-        from homeassistant.const import (
-            __version__ as localversion,
-        )  # pylint: disable=import-error
-
+        if localversion is None:
+            LOGGER.error("No homeassistant installation found")
         self._data = localversion
 
     def parse(self):
