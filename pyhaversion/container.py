@@ -26,7 +26,7 @@ class HaVersionContainer(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
-        async with async_timeout.timeout(self.timeout, loop=asyncio.get_event_loop()):
+        async with async_timeout.timeout(self.timeout):
             request = await self.session.get(
                 url=kwargs.get("url", URL.format(image=self.image)),
                 headers=DEFAULT_HEADERS,

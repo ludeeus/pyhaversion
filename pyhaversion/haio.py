@@ -26,7 +26,7 @@ class HaVersionHaio(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
-        async with async_timeout.timeout(self.timeout, loop=asyncio.get_running_loop()):
+        async with async_timeout.timeout(self.timeout):
             request = await self.session.get(url=URL, headers=DEFAULT_HEADERS)
             self._data = await request.json()
 
