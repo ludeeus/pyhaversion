@@ -20,7 +20,6 @@ from .consts import (
     DEFAULT_HEADERS,
     DEFAULT_IMAGE,
     LOGGER,
-    HaVersionSource,
 )
 from .exceptions import HaVersionInputException
 
@@ -30,8 +29,6 @@ URL = "https://version.home-assistant.io/{channel}.json"
 @dataclass
 class HaVersionSupervisor(HaVersionBase):
     """Handle versions for the Supervisor source."""
-
-    source = HaVersionSource.SUPERVISOR
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""

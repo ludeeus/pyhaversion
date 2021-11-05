@@ -7,7 +7,7 @@ from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
-from .consts import DEFAULT_HEADERS, DEFAULT_IMAGE, HaVersionChannel, HaVersionSource
+from .consts import DEFAULT_HEADERS, DEFAULT_IMAGE, HaVersionChannel
 
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tags"
 
@@ -15,8 +15,6 @@ URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tag
 @dataclass
 class HaVersionContainer(HaVersionBase):
     """Handle versions for the Container source."""
-
-    source = HaVersionSource.CONTAINER
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""

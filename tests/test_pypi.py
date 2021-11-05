@@ -26,6 +26,7 @@ async def test_stable_version(HaVersion):
             )
             await haversion.get_version()
             assert haversion.version == STABLE_VERSION
+            assert haversion.source == HaVersionSource.PYPI
 
 
 @pytest.mark.asyncio

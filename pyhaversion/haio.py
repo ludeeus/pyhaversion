@@ -11,7 +11,6 @@ from .consts import (
     DATA_RELEASE_NOTES,
     DATA_RELEASE_TITLE,
     DEFAULT_HEADERS,
-    HaVersionSource,
 )
 
 URL = "https://www.home-assistant.io/version.json"
@@ -20,8 +19,6 @@ URL = "https://www.home-assistant.io/version.json"
 @dataclass
 class HaVersionHaio(HaVersionBase):
     """Handle versions for the home-assistant.io source."""
-
-    source = HaVersionSource.HAIO
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""

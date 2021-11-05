@@ -46,12 +46,13 @@ class HaVersion:
         timeout: int = DEFAULT_TIMEOUT,
     ):
         """Initialize the client."""
-        self._handler = _HANDLERS[source](
-            channel=channel,
+        self._handler: HaVersionBase = _HANDLERS[source](
             board=board,
+            channel=channel,
             image=image,
-            timeout=timeout,
             session=session,
+            source=source,
+            timeout=timeout,
         )
 
     @property
@@ -60,7 +61,7 @@ class HaVersion:
         return self._handler.source
 
     @property
-    def version(self) -> AwesomeVersion:
+    def version(self) -> AwesomeVersion | None:
         """Return the version."""
         return self._handler.version
 
