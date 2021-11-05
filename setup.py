@@ -19,7 +19,6 @@ setup(
     description="Get the latest Home Assistant version from various sources.",
     install_requires=[
         "aiohttp>=3.6.1,<4.0",
-        "async_timeout<=3.0.1",
         "awesomeversion>=21.8.1",
     ],
     keywords=["homeassistant", "version", "update"],

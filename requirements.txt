@@ -2,7 +2,6 @@ aiohttp>=3.6.1,<4.0
 pytest-asyncio
 pytest-runner
 aresponses
-async_timeout<=3.0.1
 black==21.9b0
 pre-commit==2.15.0
 pytest-cov==3.0.0

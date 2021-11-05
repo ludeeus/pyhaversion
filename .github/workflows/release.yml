@@ -12,7 +12,7 @@ jobs:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v2.3.5
 
-      - name: 🛠 Set up Python ${{ matrix.python-version }}
+      - name: 🛠 Set up Python
         uses: actions/setup-python@v2
         id: python
         with:
@@ -26,6 +26,7 @@ jobs:
           export version=${{ github.ref }}
           sed -i "s|main|${version##*/}|" ./setup.py
           cat ./setup.py
+
       - name: 🚀 Publish to PyPi
         env:
           TWINE_USERNAME: __token__
