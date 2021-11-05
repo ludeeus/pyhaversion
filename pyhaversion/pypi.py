@@ -1,6 +1,5 @@
 """pyhaversion package."""
 from dataclasses import dataclass
-from typing import List
 
 from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
@@ -12,7 +11,6 @@ from .consts import (
     DATA_VERSION,
     DEFAULT_HEADERS,
     HaVersionChannel,
-    HaVersionSource,
 )
 from .exceptions import HaVersionInputException
 
@@ -22,8 +20,6 @@ URL = "https://pypi.org/pypi/homeassistant/json"
 @dataclass
 class HaVersionPypi(HaVersionBase):
     """Handle versions for the PyPi source."""
-
-    source = HaVersionSource.PYPI
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""

@@ -1,8 +1,6 @@
 """HaVersionLocal class."""
 from dataclasses import dataclass
 
-from pyhaversion.consts import HaVersionSource
-
 from .base import HaVersionBase
 from .consts import LOGGER
 
@@ -15,8 +13,6 @@ except (ModuleNotFoundError, ImportError):
 @dataclass
 class HaVersionLocal(HaVersionBase):
     """HaVersionLocal class."""
-
-    source = HaVersionSource.LOCAL
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
