@@ -1,8 +1,7 @@
 """pyhaversion package."""
-import asyncio
 from dataclasses import dataclass
 
-import async_timeout
+from aiohttp.client import ClientTimeout
 
 from .base import HaVersionBase
 from .consts import (
@@ -26,9 +25,12 @@ class HaVersionHaio(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
-        async with async_timeout.timeout(self.timeout, loop=asyncio.get_running_loop()):
-            request = await self.session.get(url=URL, headers=DEFAULT_HEADERS)
-            self._data = await request.json()
+        request = await self.session.get(
+            url=URL,
+            headers=DEFAULT_HEADERS,
+            timeout=ClientTimeout(total=self.timeout),
+        )
+        self._data = await request.json()
 
     def parse(self):
         """Logic to parse new version data."""
