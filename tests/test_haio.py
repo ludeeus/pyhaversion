@@ -27,7 +27,7 @@ async def test_haio(aresponses):
 
 @pytest.mark.asyncio
 async def test_etag(aresponses):
-    """Test hassio etag."""
+    """Test haio etag."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",

@@ -2,6 +2,8 @@
 from dataclasses import dataclass
 
 from aiohttp.client import ClientTimeout
+from aiohttp.hdrs import IF_NONE_MATCH
+
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
@@ -12,7 +14,7 @@ from .consts import (
     DEFAULT_HEADERS,
     HaVersionChannel,
 )
-from .exceptions import HaVersionInputException
+from .exceptions import HaVersionInputException, HaVersionNotModifiedException
 
 URL = "https://pypi.org/pypi/homeassistant/json"
 
@@ -28,11 +30,20 @@ class HaVersionPypi(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
+        headers = DEFAULT_HEADERS
+        if (etag := kwargs.get("etag")) is not None:
+            headers[IF_NONE_MATCH] = f'W/"{etag}"'
+
         request = await self.session.get(
             url=URL,
-            headers=DEFAULT_HEADERS,
+            headers=headers,
             timeout=ClientTimeout(total=self.timeout),
         )
+        self._etag = request.headers.get("etag")
+
+        if request.status == 304:
+            raise HaVersionNotModifiedException
+
         self._data = await request.json()
 
     def parse(self):
