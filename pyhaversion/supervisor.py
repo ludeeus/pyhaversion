@@ -2,6 +2,7 @@
 from dataclasses import dataclass
 
 from aiohttp.client import ClientTimeout
+from aiohttp.hdrs import IF_NONE_MATCH
 
 from .base import HaVersionBase
 from .consts import (
@@ -21,7 +22,7 @@ from .consts import (
     DEFAULT_IMAGE,
     LOGGER,
 )
-from .exceptions import HaVersionInputException
+from .exceptions import HaVersionInputException, HaVersionNotModifiedException
 
 URL = "https://version.home-assistant.io/{channel}.json"
 
@@ -39,11 +40,20 @@ class HaVersionSupervisor(HaVersionBase):
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
+        headers = DEFAULT_HEADERS
+        if (etag := kwargs.get("etag")) is not None:
+            headers[IF_NONE_MATCH] = etag
+
         request = await self.session.get(
             url=URL.format(channel=self.channel),
-            headers=DEFAULT_HEADERS,
+            headers=headers,
             timeout=ClientTimeout(total=self.timeout),
         )
+        self._etag = request.headers.get("Etag")
+
+        if request.status == 304:
+            raise HaVersionNotModifiedException
+
         self._data = await request.json()
 
     def parse(self):

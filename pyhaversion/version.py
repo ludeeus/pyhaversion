@@ -61,6 +61,11 @@ class HaVersion:
         return self._handler.source
 
     @property
+    def etag(self) -> str | None:
+        """Return the etag of the last request if any."""
+        return self._handler.etag
+
+    @property
     def version(self) -> AwesomeVersion | None:
         """Return the version."""
         return self._handler.version
@@ -70,14 +75,18 @@ class HaVersion:
         """Return extended version data for supported sources."""
         return self._handler.version_data
 
-    async def get_version(self) -> tuple[AwesomeVersion, dict[str, Any]]:
+    async def get_version(
+        self,
+        *,
+        etag: str | None = None,
+    ) -> tuple[AwesomeVersion, dict[str, Any]]:
         """
         Get version update.
 
         Returns a tupe with version, version_data.
         """
         try:
-            await self._handler.fetch()
+            await self._handler.fetch(etag=etag)
 
         except asyncio.TimeoutError as exception:
             raise HaVersionFetchException(

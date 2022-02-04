@@ -29,6 +29,8 @@ class HaVersionBase:
     session: aiohttp.ClientSession | None = field(repr=False, default=None)
     timeout: int = field(repr=False, default=DEFAULT_TIMEOUT)
 
+    _etag: str | None = None
+
     _data: dict[str, Any] = field(repr=False, default_factory=dict)
     _version: AwesomeVersion | None = field(repr=False, default=None)
     _version_data: dict[str, Any] = field(repr=False, default_factory=dict)
@@ -40,6 +42,11 @@ class HaVersionBase:
     def data(self) -> dict[str, Any]:
         """Return the version."""
         return self._data
+
+    @property
+    def etag(self) -> str | None:
+        """Return the etag of the last request if any."""
+        return self._etag
 
     @property
     def version(self) -> AwesomeVersion | None:
