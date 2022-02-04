@@ -47,7 +47,7 @@ class HaVersionBase:
         return AwesomeVersion(self._version) if self._version else None
 
     @property
-    def version_data(self) -> dict[str, Any]:
+    def version_data(self) -> dict[str, Any] | None:
         """Return extended version data for supported sources."""
         return {
             DATA_SOURCE: self.source,

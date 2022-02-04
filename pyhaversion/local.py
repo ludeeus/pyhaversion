@@ -23,3 +23,8 @@ class HaVersionLocal(HaVersionBase):
     def parse(self):
         """Logic to parse new version data."""
         self._version = self.data
+
+    @property
+    def version_data(self) -> None:
+        """Return extended version data."""
+        return None
