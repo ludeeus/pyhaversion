@@ -17,17 +17,15 @@ async def example():
             HaVersionSource.PYPI,
         ]
         for source in sources:
-            haversion = HaVersion(
+            version, data = await HaVersion(
                 session=session,
                 source=source,
                 board="generic-x86-64",
                 channel=HaVersionChannel.DEFAULT,
-            )
-            version, data = await haversion.get_version(etag="y2HmqJLkv+skHEqkZe50Sw")
+            ).get_version()
             print(source)
             print("Version:", version)
             print("Version data:", data)
-            print("Etag", haversion.etag)
             print()
 
 
