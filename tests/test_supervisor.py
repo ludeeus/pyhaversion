@@ -6,12 +6,11 @@ import pytest
 
 from pyhaversion import (
     HaVersion,
-    HaVersionNotModifiedException,
-    HaVersionInputException,
     HaVersionChannel,
+    HaVersionInputException,
+    HaVersionNotModifiedException,
     HaVersionSource,
 )
-
 from tests.common import fixture
 
 from .const import HEADERS, STABLE_VERSION

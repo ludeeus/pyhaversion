@@ -9,8 +9,8 @@ from aiohttp import ClientError, ClientResponse
 from pyhaversion import (
     HaVersion,
     HaVersionFetchException,
-    HaVersionParseException,
     HaVersionNotModifiedException,
+    HaVersionParseException,
 )
 
 

@@ -3,7 +3,6 @@ from dataclasses import dataclass
 
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
-
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
