@@ -30,12 +30,12 @@ class HaVersionContainer(HaVersionBase):
         )
         self._data = await request.json()
         self.parse()
-        if not self.version and (next_url := self.data.get("next")):
+        if not self._version and (next_url := self.data.get("next")):
             await self.fetch(**{"url": next_url})
 
     def parse(self):
         """Logic to parse new version data."""
-        for image in self.data["results"]:
+        for image in self.data.get("results", []):
             version = image["name"]
             if not version.startswith("2"):
                 continue
