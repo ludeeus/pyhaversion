@@ -6,9 +6,8 @@ from unittest.mock import patch
 import aiohttp
 import pytest
 
-from pyhaversion import HaVersion
+from pyhaversion import HaVersion, HaVersionException
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
-from pyhaversion.exceptions import HaVersionInputException
 from tests.common import fixture
 
 from .const import (
@@ -227,3 +226,34 @@ async def test_beta_version_beta_week_pagination(aresponses):
         )
         await haversion.get_version()
         assert haversion.version == BETA_VERSION_BETA_WEEK
+
+
+@pytest.mark.asyncio
+async def test_keyerror(aresponses):
+    """Test container KeyError."""
+    aresponses.add(
+        "registry.hub.docker.com",
+        "/v2/repositories/homeassistant/home-assistant/tags",
+        "get",
+        aresponses.Response(
+            text="{}",
+            status=200,
+            headers=HEADERS,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        haversion = HaVersion(
+            session=session,
+            source=HaVersionSource.CONTAINER,
+            channel=HaVersionChannel.BETA,
+        )
+        with pytest.raises(HaVersionException):
+            await haversion.get_version()
+            assert haversion.version is None
+
+        haversion._handler._version = "1.2.3"
+
+        with pytest.raises(HaVersionException):
+            await haversion.get_version()
+            assert haversion.version == "1.2.3"

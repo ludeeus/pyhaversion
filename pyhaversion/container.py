@@ -8,6 +8,7 @@ from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
 from .consts import DEFAULT_HEADERS, DEFAULT_IMAGE, HaVersionChannel
+from .exceptions import HaVersionFetchException
 
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/{image}/tags"
 
@@ -29,7 +30,12 @@ class HaVersionContainer(HaVersionBase):
             timeout=ClientTimeout(total=self.timeout),
         )
         self._data = await request.json()
-        self.parse()
+        try:
+            self.parse()
+        except KeyError as exception:
+            raise HaVersionFetchException(
+                "Could not handle response from Docker Hub"
+            ) from exception
         if not self.version and (next_url := self.data.get("next")):
             await self.fetch(**{"url": next_url})
 
