@@ -1,5 +1,6 @@
 """pyhaversion package."""
 from dataclasses import dataclass
+from json import JSONDecodeError
 
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
@@ -13,7 +14,7 @@ from .consts import (
     DATA_RELEASE_TITLE,
     DEFAULT_HEADERS,
 )
-from .exceptions import HaVersionNotModifiedException
+from .exceptions import HaVersionFetchException, HaVersionNotModifiedException
 
 URL = "https://www.home-assistant.io/version.json"
 
@@ -38,7 +39,12 @@ class HaVersionHaio(HaVersionBase):
         if request.status == 304:
             raise HaVersionNotModifiedException
 
-        self._data = await request.json()
+        try:
+            self._data = await request.json()
+        except JSONDecodeError as exception:
+            raise HaVersionFetchException(
+                f"Could not parse JSON from response - {exception}"
+            ) from exception
 
     def parse(self):
         """Logic to parse new version data."""
