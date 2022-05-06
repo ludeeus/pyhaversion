@@ -3,7 +3,7 @@ pytest-asyncio
 pytest-runner
 aresponses
 black==22.3.0
-pre-commit==2.18.1
+pre-commit==2.19.0
 pytest-cov==3.0.0
 pytest==7.1.1
 awesomeversion>=21.8.1
