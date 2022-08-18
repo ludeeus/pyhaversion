@@ -8,7 +8,7 @@ DEFAULT_BOARD = "ova"
 DEFAULT_IMAGE = "default"
 DEFAULT_TIMEOUT = 10
 DEFAULT_HEADERS = {
-    "User-Agent": "python/pyharversion",
+    "User-Agent": "python/pyhaversion",
     "Content-Type": "application/json",
 }
 
