@@ -2,7 +2,7 @@ aiohttp>=3.6.1,<4.0
 pytest-asyncio
 pytest-runner
 aresponses
-black==22.8.0
+black==22.10.0
 pre-commit==2.20.0
 pytest-cov==3.0.0
 pytest==7.2.0
