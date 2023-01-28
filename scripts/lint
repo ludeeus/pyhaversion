@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+python3 -m isort .
+python3 -m black --fast pyhaversion tests

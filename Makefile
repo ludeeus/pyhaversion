@@ -15,6 +15,3 @@ black: ## Lint all files black
 	@isort .
 	@python3 -m black --fast pyhaversion tests
 
-coverage: ## Check the coverage of the package
-	@python3 -m pytest tests -rxf -x -v -l --cov=./ --cov-report=xml > /dev/null
-	@coverage report

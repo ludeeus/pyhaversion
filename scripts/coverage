@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+python3 -m pytest tests -rxf -x -v -l --cov=./ --cov-report=xml > /dev/null
+coverage report
