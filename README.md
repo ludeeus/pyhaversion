@@ -1,7 +1,7 @@
 # pyhaversion
 
 [![codecov](https://codecov.io/gh/ludeeus/pyhaversion/branch/main/graph/badge.svg)](https://codecov.io/gh/ludeeus/pyhaversion)
-![python version](https://img.shields.io/badge/Python-3.8=><=3.9-blue.svg)
+![python version](https://img.shields.io/badge/Python-3.10=><=3.11-blue.svg)
 [![PyPI](https://img.shields.io/pypi/v/pyhaversion)](https://pypi.org/project/pyhaversion)
 ![Actions](https://github.com/ludeeus/pyhaversion/workflows/Actions/badge.svg?branch=main)
 

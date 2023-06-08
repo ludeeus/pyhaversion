@@ -30,20 +30,24 @@ jobs:
         run:  black . --check
 
   test:
-    name: Test with Python ${{ matrix.python-version }}
+    name: Test with Python ${{ matrix.entry.version }}
     needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10"]
+        entry:
+          - version: "3.10"
+            minimum: true
+          - version: "3.11"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v3
 
-      - name: 🛠️ Set up Python ${{ matrix.python-version }}
+      - name: 🛠️ Set up Python ${{ matrix.entry.version }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.entry.version }}
+          allow-prereleases: ${{ matrix.entry.prerelease || false }}
           cache: "pip"
 
       - name: Install dependencies
@@ -53,7 +57,7 @@ jobs:
         run:  scripts/test
 
       - name: 📤 Upload coverage to Codecov
-        if: ${{ matrix.python-version == '3.8' }}
+        if: ${{ matrix.entry.minimum || false }}
         run: |
           scripts/coverage
           curl -sfSL https://codecov.io/bash | bash -
@@ -93,20 +97,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   test-install:
-    name: Test install with Python ${{ matrix.python-version }}
+    name: Test install with Python ${{ matrix.entry.version }}
     needs: lint
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.8, 3.9, "3.10"]
+        entry:
+          - version: "3.10"
+          - version: "3.11"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v3
 
-      - name: 🛠️ Set up Python ${{ matrix.python-version }}
+      - name: 🛠️ Set up Python ${{ matrix.entry.version }}
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: ${{ matrix.entry.version }}
+          allow-prereleases: ${{ matrix.entry.prerelease || false }}
 
       - name: 🏃 Run setup
         run:  python3 setup.py install
