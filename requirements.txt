@@ -6,5 +6,5 @@ black
 isort
 pre-commit==3.3.2
 pytest-cov==4.1.0
-pytest==7.3.1
+pytest==7.3.2
 awesomeversion>=21.8.1
