@@ -22,7 +22,7 @@ from .consts import (
     DEFAULT_IMAGE,
     LOGGER,
 )
-from .exceptions import HaVersionInputException, HaVersionNotModifiedException
+from .exceptions import HaVersionNotModifiedException
 
 URL = "https://version.home-assistant.io/{channel}.json"
 
@@ -33,8 +33,7 @@ class HaVersionSupervisor(HaVersionBase):
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""
-        if self.session is None:
-            raise HaVersionInputException("Missing aiohttp.ClientSession")
+        super().validate_input()
         if self.image is None:
             self.image = "default"
 

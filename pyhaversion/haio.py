@@ -14,7 +14,10 @@ from .consts import (
     DATA_RELEASE_TITLE,
     DEFAULT_HEADERS,
 )
-from .exceptions import HaVersionFetchException, HaVersionNotModifiedException
+from .exceptions import (
+    HaVersionFetchException,
+    HaVersionNotModifiedException,
+)
 
 URL = "https://www.home-assistant.io/version.json"
 

@@ -14,6 +14,9 @@ except (ModuleNotFoundError, ImportError):
 class HaVersionLocal(HaVersionBase):
     """HaVersionLocal class."""
 
+    def validate_input(self) -> None:
+        """Raise HaVersionInputException if expected input are missing."""
+
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
         if localversion is None:
