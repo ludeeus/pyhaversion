@@ -29,5 +29,4 @@ async def example():
             print()
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(example())
+asyncio.run(example())
