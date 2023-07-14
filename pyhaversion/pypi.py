@@ -13,7 +13,7 @@ from .consts import (
     DEFAULT_HEADERS,
     HaVersionChannel,
 )
-from .exceptions import HaVersionInputException, HaVersionNotModifiedException
+from .exceptions import HaVersionNotModifiedException
 
 URL = "https://pypi.org/pypi/homeassistant/json"
 
@@ -21,11 +21,6 @@ URL = "https://pypi.org/pypi/homeassistant/json"
 @dataclass
 class HaVersionPypi(HaVersionBase):
     """Handle versions for the PyPi source."""
-
-    def validate_input(self) -> None:
-        """Raise HaVersionInputException if expected input are missing."""
-        if self.session is None:
-            raise HaVersionInputException("Missing aiohttp.ClientSession")
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""

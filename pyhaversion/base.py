@@ -13,6 +13,7 @@ from .consts import (
     HaVersionChannel,
     HaVersionSource,
 )
+from .exceptions import HaVersionInputException
 
 
 @dataclass
@@ -64,6 +65,8 @@ class HaVersionBase:
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""
+        if self.session is None:
+            raise HaVersionInputException("Missing aiohttp.ClientSession")
 
     async def fetch(self, **kwargs):
         """Logic to fetch new version data."""
