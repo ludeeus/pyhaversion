@@ -11,9 +11,7 @@ from .base import HaVersionBase
 from .consts import DEFAULT_HEADERS, HaVersionChannel
 from .exceptions import HaVersionFetchException
 
-URL = (
-    "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assistant/tags"
-)
+URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assistant/tags"
 
 
 @dataclass

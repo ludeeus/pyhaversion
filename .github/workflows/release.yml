@@ -18,17 +18,14 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install poetry
+        run: pipx install poetry
+
       - name: Set version number
-        run: |
-          sed -i "s|main|${{ github.event.release.tag_name }}|" ./setup.py
-          cat ./setup.py
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install setuptools wheel twine
+        run: poetry version "${{ github.event.release.tag_name }}"
 
       - name: Package
-        run: python setup.py sdist bdist_wheel
+        run: poetry build
 
       - name: Upload dists
         uses: actions/upload-artifact@v4.3.3

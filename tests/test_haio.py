@@ -17,9 +17,7 @@ async def test_haio(aresponses):
         "www.home-assistant.io",
         "/version.json",
         "get",
-        aresponses.Response(
-            text=fixture("haio/default", False), status=200, headers=HEADERS
-        ),
+        aresponses.Response(text=fixture("haio/default", False), status=200, headers=HEADERS),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.HAIO)

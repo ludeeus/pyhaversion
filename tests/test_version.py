@@ -4,8 +4,8 @@ import asyncio
 from socket import gaierror
 from unittest.mock import patch
 
+from aiohttp import ClientError
 import pytest
-from aiohttp import ClientError, ClientResponse
 
 from pyhaversion import (
     HaVersion,

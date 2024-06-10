@@ -15,13 +15,11 @@ async def mocked_fetch(self):
 
 @pytest.fixture
 def HaVersion():
-    with patch(
-        "pyhaversion.container.HaVersionContainer.fetch", return_value=mocked_fetch
-    ), patch("pyhaversion.haio.HaVersionHaio.fetch", return_value=mocked_fetch), patch(
-        "pyhaversion.local.HaVersionLocal.fetch", return_value=mocked_fetch
-    ), patch(
-        "pyhaversion.pypi.HaVersionPypi.fetch", return_value=mocked_fetch
-    ), patch(
-        "pyhaversion.supervisor.HaVersionSupervisor.fetch", return_value=mocked_fetch
+    with (
+        patch("pyhaversion.container.HaVersionContainer.fetch", return_value=mocked_fetch),
+        patch("pyhaversion.haio.HaVersionHaio.fetch", return_value=mocked_fetch),
+        patch("pyhaversion.local.HaVersionLocal.fetch", return_value=mocked_fetch),
+        patch("pyhaversion.pypi.HaVersionPypi.fetch", return_value=mocked_fetch),
+        patch("pyhaversion.supervisor.HaVersionSupervisor.fetch", return_value=mocked_fetch),
     ):
         yield PyHaVersion

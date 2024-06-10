@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
-python3 -m pytest tests -rxf -x -v -l --cov=./ --cov-report=xml > /dev/null
-coverage report
+poetry run pytest tests --cov=./pyhaversion --cov-report=xml > /dev/null
+poetry run coverage report

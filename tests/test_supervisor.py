@@ -24,9 +24,7 @@ async def test_stable_version(aresponses):
         "version.home-assistant.io",
         "/stable.json",
         "get",
-        aresponses.Response(
-            text=fixture("supervisor/default", False), status=200, headers=HEADERS
-        ),
+        aresponses.Response(text=fixture("supervisor/default", False), status=200, headers=HEADERS),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISOR)
