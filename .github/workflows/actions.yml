@@ -36,9 +36,8 @@ jobs:
     strategy:
       matrix:
         entry:
-          - version: "3.10"
+          - version: "3.12"
             minimum: true
-          - version: "3.11"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v4.1.1
@@ -95,28 +94,3 @@ jobs:
           name: ${{ steps.version.outputs.version }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  test-install:
-    name: Test install with Python ${{ matrix.entry.version }}
-    needs: lint
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        entry:
-          - version: "3.10"
-          - version: "3.11"
-    steps:
-      - name: 📥 Checkout the repository
-        uses: actions/checkout@v4.1.1
-
-      - name: 🛠️ Set up Python ${{ matrix.entry.version }}
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.entry.version }}
-          allow-prereleases: ${{ matrix.entry.prerelease || false }}
-
-      - name: 🏃 Run setup
-        run:  python3 setup.py install
-
-      - name: 🏃 Run example
-        run:  python3 example.py

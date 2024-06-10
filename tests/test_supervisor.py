@@ -1,4 +1,5 @@
 """Tests for Hassio."""
+
 from unittest.mock import patch
 
 import aiohttp

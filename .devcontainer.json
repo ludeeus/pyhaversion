@@ -1,7 +1,6 @@
 {
 	"name": "ludeeus/pyhaversion",
-	"image": "mcr.microsoft.com/vscode/devcontainers/python:0-3.10",
-	"context": ".",
+	"image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
 	"postCreateCommand": "scripts/setup",
 	"customizations": {
 		"vscode": {

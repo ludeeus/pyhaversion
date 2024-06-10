@@ -1,4 +1,5 @@
 """The setup script."""
+
 from setuptools import find_packages, setup
 
 with open("README.md") as readme_file:
@@ -11,9 +12,7 @@ setup(
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Natural Language :: English",
-        "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
     description="Get the latest Home Assistant version from various sources.",
@@ -27,7 +26,7 @@ setup(
     long_description=readme,
     name="pyhaversion",
     packages=find_packages(include=["pyhaversion"]),
-    python_requires=">=3.8.0",
+    python_requires=">=3.12",
     url="https://github.com/ludeeus/pyhaversion",
     version="main",
 )

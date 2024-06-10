@@ -1,4 +1,5 @@
 """Tests for base"""
+
 import asyncio
 from socket import gaierror
 from unittest.mock import patch

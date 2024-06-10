@@ -1,4 +1,5 @@
 """HaVersionLocal class."""
+
 from dataclasses import dataclass
 
 from .base import HaVersionBase
