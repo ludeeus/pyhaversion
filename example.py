@@ -1,4 +1,5 @@
 """Example usage of pyhaversion."""
+
 import asyncio
 
 import aiohttp
