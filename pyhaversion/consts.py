@@ -1,8 +1,9 @@
 """Constants for pyhaversion."""
+
 from __future__ import annotations
 
 import logging
-from enum import Enum
+from enum import StrEnum
 from typing import Any
 
 LOGGER: logging.Logger = logging.getLogger(__package__)
@@ -37,20 +38,6 @@ DATA_RELEASES = "releases"
 DATA_SOURCE = "source"
 DATA_SUPERVISOR = "supervisor"
 DATA_VERSION = "version"
-
-
-class StrEnum(str, Enum):
-    """Partial backport of Python 3.11's StrEnum."""
-
-    def __new__(cls, value: str, *args: Any, **kwargs: Any) -> StrEnum:
-        """Create a new StrEnum instance."""
-        if not isinstance(value, str):
-            raise TypeError(f"{value!r} is not a string")
-        return super().__new__(cls, value, *args, **kwargs)
-
-    def __str__(self) -> str:
-        """Return self.value."""
-        return str(self.value)
 
 
 class HaVersionSource(StrEnum):

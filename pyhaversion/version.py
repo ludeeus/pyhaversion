@@ -1,4 +1,5 @@
 """Get the latest Home Assistant version from various sources."""
+
 from __future__ import annotations
 
 import asyncio

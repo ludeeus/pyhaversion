@@ -1,4 +1,5 @@
 """pyhaversion package."""
+
 from dataclasses import dataclass
 
 from aiohttp.client import ClientTimeout

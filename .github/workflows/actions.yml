@@ -36,9 +36,8 @@ jobs:
     strategy:
       matrix:
         entry:
-          - version: "3.10"
+          - version: "3.12"
             minimum: true
-          - version: "3.11"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v4.1.1
@@ -103,8 +102,7 @@ jobs:
     strategy:
       matrix:
         entry:
-          - version: "3.10"
-          - version: "3.11"
+          - version: "3.12"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v4.1.1

@@ -1,4 +1,5 @@
 """Tests for ha.io/version.json."""
+
 from unittest.mock import patch
 
 import aiohttp
