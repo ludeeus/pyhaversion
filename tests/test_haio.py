@@ -1,4 +1,5 @@
 """Tests for ha.io/version.json."""
+
 import aiohttp
 import pytest
 

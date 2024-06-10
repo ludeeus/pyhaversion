@@ -1,4 +1,5 @@
 """pyhaversion package."""
+
 from .consts import HaVersionChannel, HaVersionSource
 from .exceptions import (
     HaVersionException,

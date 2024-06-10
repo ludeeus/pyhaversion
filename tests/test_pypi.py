@@ -1,4 +1,5 @@
 """Tests for PyPi."""
+
 from unittest.mock import patch
 
 import aiohttp
