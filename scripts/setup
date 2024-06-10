@@ -1,3 +1,4 @@
 #!/usr/bin/env bash
 
-python3 -m pip --disable-pip-version-check install -r requirements.txt
+pipx install poetry
+poetry install --no-interaction

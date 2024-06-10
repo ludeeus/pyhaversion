@@ -24,10 +24,10 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run:  scripts/setup
+        run: scripts/setup
 
-      - name: Lint with Black
-        run:  black . --check
+      - name: Lint/test with pre-commit
+        run: poetry run pre-commit run --all-files
 
   test:
     name: Test with Python ${{ matrix.entry.version }}
@@ -50,7 +50,7 @@ jobs:
           cache: "pip"
 
       - name: Install dependencies
-        run:  scripts/setup
+        run: scripts/setup
 
       - name: Run tests
         run:  scripts/test

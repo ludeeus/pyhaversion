@@ -58,20 +58,12 @@ class HaVersionSupervisor(HaVersionBase):
 
     def parse(self):
         """Logic to parse new version data."""
-        if self.image != DEFAULT_IMAGE and self.image not in self.data.get(
-            DATA_HOMEASSISTANT, {}
-        ):
-            LOGGER.warning(
-                "Image '%s' not found, using default '%s'", self.image, DEFAULT_IMAGE
-            )
+        if self.image != DEFAULT_IMAGE and self.image not in self.data.get(DATA_HOMEASSISTANT, {}):
+            LOGGER.warning("Image '%s' not found, using default '%s'", self.image, DEFAULT_IMAGE)
             self.image = DEFAULT_IMAGE
         self._version = self.data.get(DATA_HOMEASSISTANT, {}).get(self.image)
-        if self.board != DEFAULT_BOARD and self.board not in self.data.get(
-            DATA_HASSOS, {}
-        ):
-            LOGGER.warning(
-                "Board '%s' not found, using default '%s'", self.board, DEFAULT_BOARD
-            )
+        if self.board != DEFAULT_BOARD and self.board not in self.data.get(DATA_HASSOS, {}):
+            LOGGER.warning("Board '%s' not found, using default '%s'", self.board, DEFAULT_BOARD)
             self.board = DEFAULT_BOARD
         self._version_data = {
             DATA_AUDIO: self.data.get(DATA_AUDIO),

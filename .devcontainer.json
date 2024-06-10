@@ -1,6 +1,5 @@
 {
 	"name": "ludeeus/pyhaversion",
-	"image": "mcr.microsoft.com/vscode/devcontainers/python:3.12",
 	"postCreateCommand": "scripts/setup",
 	"customizations": {
 		"vscode": {
@@ -24,5 +23,14 @@
 				"GitHub.copilot"
 			]
 		}
-	}
+	},
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/poetry:2": {},
+		"ghcr.io/devcontainers/features/python:1": {
+			"installTools": false,
+			"version": "3.12"
+		}
+	},
+	"image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+	"updateContentCommand": "poetry install && poetry run pre-commit install"
 }

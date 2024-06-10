@@ -58,9 +58,7 @@ async def test_stable_version_beta_week(aresponses):
         "pypi.org",
         "/pypi/homeassistant/json",
         "get",
-        aresponses.Response(
-            text=fixture("pypi/beta", False), status=200, headers=HEADERS
-        ),
+        aresponses.Response(text=fixture("pypi/beta", False), status=200, headers=HEADERS),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(

@@ -107,17 +107,13 @@ async def test_stable_version_pagination(aresponses):
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
-        aresponses.Response(
-            text=fixture("container/page1", False), status=200, headers=HEADERS
-        ),
+        aresponses.Response(text=fixture("container/page1", False), status=200, headers=HEADERS),
     )
     aresponses.add(
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
-        aresponses.Response(
-            text=fixture("container/page2", False), status=200, headers=HEADERS
-        ),
+        aresponses.Response(text=fixture("container/page2", False), status=200, headers=HEADERS),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(
