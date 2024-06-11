@@ -50,6 +50,6 @@
 - [ ] The code change is tested and works locally.
 - [ ] Local tests pass.
 - [ ] There is no commented out code in this PR.
-- [ ] The code has been formatted using Black (`make black`)
-- [ ] Coverage is still 100% (check with `make coverage`)
+- [ ] The code has been formatted (`scripts/lint`)
+- [ ] Coverage is still 100% (check with `scripts/coverage`)
 - [ ] Tests have been added to verify that the new code works.

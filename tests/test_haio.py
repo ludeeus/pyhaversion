@@ -11,13 +11,17 @@ from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_haio(aresponses):
+async def test_haio(aresponses) -> None:
     """Test ha.io/version.json stable."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",
         "get",
-        aresponses.Response(text=fixture("haio/default", False), status=200, headers=HEADERS),
+        aresponses.Response(
+            text=fixture("haio/default", False),
+            status=200,
+            headers=HEADERS,
+        ),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.HAIO)
@@ -26,7 +30,7 @@ async def test_haio(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_etag(aresponses):
+async def test_etag(aresponses) -> None:
     """Test haio etag."""
     aresponses.add(
         "www.home-assistant.io",
@@ -54,7 +58,7 @@ async def test_etag(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_bad_json(aresponses):
+async def test_bad_json(aresponses) -> None:
     """Test bad JSON."""
     aresponses.add(
         "www.home-assistant.io",

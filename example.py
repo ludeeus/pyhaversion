@@ -8,7 +8,7 @@ from pyhaversion import HaVersion
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
 
 
-async def example():
+async def example() -> None:
     """Example usage of pyhaversion."""
     async with aiohttp.ClientSession() as session:
         sources = [

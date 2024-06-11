@@ -2,19 +2,20 @@
 repos:
   - repo: local
     hooks:
-      - id: black
-        name: black
+      - id: ruff-check
+        name: Ruff Linter
         language: system
         types: [python]
-        entry: poetry run black . --check
-        pass_filenames: false
+        entry: poetry run ruff check --fix
+        require_serial: true
         stages: [commit, push, manual]
-      - id: isort
-        name: isort
+        exclude: ^tests|example\.py$
+      - id: ruff-format
+        name: Ruff Formatter
         language: system
         types: [python]
-        entry: poetry run isort . --check
-        pass_filenames: false
+        entry: poetry run ruff format
+        require_serial: true
         stages: [commit, push, manual]
       - id: check-ast
         name: Check Python AST

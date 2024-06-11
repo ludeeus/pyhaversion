@@ -4,9 +4,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from json import JSONDecodeError
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 
@@ -20,6 +19,9 @@ from .consts import (
     DEFAULT_HEADERS,
 )
 from .exceptions import HaVersionFetchException, HaVersionNotModifiedException
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 URL = "https://www.home-assistant.io/version.json"
 
@@ -50,7 +52,7 @@ class HaVersionHaio(HaVersionBase):
             data: dict[str, Any] = await request.json()
         except JSONDecodeError as exception:
             raise HaVersionFetchException(
-                f"Could not parse JSON from response - {exception}"
+                f"Could not parse JSON from response - {exception}",
             ) from exception
         return data
 

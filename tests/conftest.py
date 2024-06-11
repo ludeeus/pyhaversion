@@ -9,14 +9,17 @@ logging.basicConfig(level=logging.DEBUG)
 pytestmark = pytest.mark.asyncio
 
 
-async def mocked_fetch(self):
+async def mocked_fetch(self) -> None:
     pass
 
 
 @pytest.fixture
 def HaVersion():
     with (
-        patch("pyhaversion.container.HaVersionContainer.fetch", return_value=mocked_fetch),
+        patch(
+            "pyhaversion.container.HaVersionContainer.fetch",
+            return_value=mocked_fetch,
+        ),
         patch("pyhaversion.haio.HaVersionHaio.fetch", return_value=mocked_fetch),
         patch("pyhaversion.local.HaVersionLocal.fetch", return_value=mocked_fetch),
         patch("pyhaversion.pypi.HaVersionPypi.fetch", return_value=mocked_fetch),
