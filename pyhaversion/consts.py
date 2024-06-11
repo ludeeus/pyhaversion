@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from enum import StrEnum
 import logging
-from typing import Any
 
 LOGGER: logging.Logger = logging.getLogger(__package__)
 
@@ -29,7 +28,6 @@ DATA_INFO = "info"
 DATA_MULTICAST = "multicast"
 DATA_OBSERVER = "observer"
 DATA_OS = "os"
-DATA_RAW = "raw"
 DATA_RELEASE_DATE = "release_date"
 DATA_RELEASE_DESCRIPTION = "release_description"
 DATA_RELEASE_NOTES = "release_notes"

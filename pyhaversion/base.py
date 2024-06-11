@@ -32,17 +32,11 @@ class HaVersionBase:
 
     _etag: str | None = None
 
-    _data: dict[str, Any] = field(repr=False, default_factory=dict)
     _version: AwesomeVersion | None = field(repr=False, default=None)
     _version_data: dict[str, Any] = field(repr=False, default_factory=dict)
 
     def __post_init__(self):
         self.validate_input()
-
-    @property
-    def data(self) -> dict[str, Any]:
-        """Return the version."""
-        return self._data
 
     @property
     def etag(self) -> str | None:
@@ -68,8 +62,8 @@ class HaVersionBase:
         if self.session is None:
             raise HaVersionInputException("Missing aiohttp.ClientSession")
 
-    async def fetch(self, **kwargs):
+    async def fetch(self, **kwargs) -> dict[str, Any]:
         """Logic to fetch new version data."""
 
-    def parse(self):
+    def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""

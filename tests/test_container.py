@@ -24,8 +24,8 @@ from .const import (
 async def test_stable_version(HaVersion):
     """Test container stable."""
     with patch(
-        "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/default"),
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/default"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(session=session, source=HaVersionSource.CONTAINER)
@@ -37,8 +37,8 @@ async def test_stable_version(HaVersion):
 async def test_beta_version(HaVersion):
     """Test container beta."""
     with patch(
-        "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/beta_week"),
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/beta_week"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
@@ -54,8 +54,8 @@ async def test_beta_version(HaVersion):
 async def test_dev_version(HaVersion):
     """Test container dev."""
     with patch(
-        "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/default"),
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/default"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
@@ -71,8 +71,8 @@ async def test_dev_version(HaVersion):
 async def test_stable_version_beta_week(HaVersion):
     """Test container stable during beta week."""
     with patch(
-        "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/beta_week"),
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/beta_week"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
@@ -87,8 +87,8 @@ async def test_stable_version_beta_week(HaVersion):
 async def test_beta_version_beta_week(HaVersion):
     """Test container beta during beta week."""
     with patch(
-        "pyhaversion.container.HaVersionContainer.data",
-        fixture("container/beta_week"),
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/beta_week"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(

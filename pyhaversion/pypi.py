@@ -1,6 +1,9 @@
 """pyhaversion package."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
+from typing import Any
 
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
@@ -23,7 +26,7 @@ URL = "https://pypi.org/pypi/homeassistant/json"
 class HaVersionPypi(HaVersionBase):
     """Handle versions for the PyPi source."""
 
-    async def fetch(self, **kwargs):
+    async def fetch(self, **kwargs) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -39,22 +42,17 @@ class HaVersionPypi(HaVersionBase):
         if request.status == 304:
             raise HaVersionNotModifiedException
 
-        self._data = await request.json()
+        return await request.json()
 
-    def parse(self):
+    def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""
-        self._version = self.data.get(DATA_INFO, {}).get(DATA_VERSION)
+        if self.channel != HaVersionChannel.BETA:
+            self._version = data.get(DATA_INFO, {}).get(DATA_VERSION)
+            return
 
-        versions = sorted(
-            [
-                AwesomeVersion(version)
-                for version in self.data.get(DATA_RELEASES, [])
-                if version.startswith("2")
-            ],
-            reverse=True,
+        self._version = AwesomeVersion(
+            sorted(
+                [version for version in data.get(DATA_RELEASES, []) if version.startswith("2")],
+                reverse=True,
+            )[0]
         )
-        for version in versions:
-            if self.channel == HaVersionChannel.STABLE and version.beta:
-                continue
-            self._version = version
-            break

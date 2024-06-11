@@ -21,8 +21,8 @@ from .const import BETA_VERSION, HEADERS, STABLE_VERSION, STABLE_VERSION_BETA_WE
 async def test_stable_version(HaVersion):
     """Test pypi stable."""
     with patch(
-        "pyhaversion.pypi.HaVersionPypi.data",
-        fixture("pypi/default"),
+        "pyhaversion.pypi.HaVersionPypi.fetch",
+        return_value=fixture("pypi/default"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
@@ -38,8 +38,8 @@ async def test_stable_version(HaVersion):
 async def test_beta_version(HaVersion):
     """Test pypi beta."""
     with patch(
-        "pyhaversion.pypi.HaVersionPypi.data",
-        fixture("pypi/beta"),
+        "pyhaversion.pypi.HaVersionPypi.fetch",
+        return_value=fixture("pypi/beta"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(
