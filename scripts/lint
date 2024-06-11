@@ -2,3 +2,4 @@
 
 poetry run isort .
 poetry run black --fast .
+poetry run pre-commit run --all-files

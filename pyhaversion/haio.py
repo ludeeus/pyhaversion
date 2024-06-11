@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from json import JSONDecodeError
 from typing import Any
 
+from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 
@@ -27,7 +28,9 @@ URL = "https://www.home-assistant.io/version.json"
 class HaVersionHaio(HaVersionBase):
     """Handle versions for the home-assistant.io source."""
 
-    async def fetch(self, **kwargs) -> dict[str, Any]:
+    session: ClientSession
+
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -44,11 +47,12 @@ class HaVersionHaio(HaVersionBase):
             raise HaVersionNotModifiedException
 
         try:
-            return await request.json()
+            data: dict[str, Any] = await request.json()
         except JSONDecodeError as exception:
             raise HaVersionFetchException(
                 f"Could not parse JSON from response - {exception}"
             ) from exception
+        return data
 
     def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""

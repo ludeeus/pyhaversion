@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
 
@@ -19,14 +20,16 @@ URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assist
 class HaVersionContainer(HaVersionBase):
     """Handle versions for the Container source."""
 
-    async def fetch(self, **kwargs) -> dict[str, Any]:
+    session: ClientSession
+
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:
         """Logic to fetch new version data."""
         request = await self.session.get(
             url=kwargs.get("url", URL),
             headers=DEFAULT_HEADERS,
             timeout=ClientTimeout(total=self.timeout),
         )
-        data = await request.json()
+        data: dict[str, Any] = await request.json()
         try:
             self.parse(data)
         except KeyError as exception:
