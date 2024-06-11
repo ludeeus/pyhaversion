@@ -1,6 +1,5 @@
 """Tests for Container."""
 
-import json
 from unittest.mock import patch
 
 import aiohttp
