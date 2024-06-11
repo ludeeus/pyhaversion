@@ -18,13 +18,17 @@ from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_stable_version(aresponses):
+async def test_stable_version(aresponses) -> None:
     """Test hassio stable."""
     aresponses.add(
         "version.home-assistant.io",
         "/stable.json",
         "get",
-        aresponses.Response(text=fixture("supervisor/default", False), status=200, headers=HEADERS),
+        aresponses.Response(
+            text=fixture("supervisor/default", False),
+            status=200,
+            headers=HEADERS,
+        ),
     )
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.SUPERVISOR)
@@ -33,7 +37,7 @@ async def test_stable_version(aresponses):
 
 
 @pytest.mark.asyncio
-async def test_beta_version(HaVersion):
+async def test_beta_version(HaVersion) -> None:
     """Test hassio beta."""
     with patch(
         "pyhaversion.supervisor.HaVersionSupervisor.fetch",
@@ -52,14 +56,14 @@ async def test_beta_version(HaVersion):
 
 
 @pytest.mark.asyncio
-async def test_input_exception(HaVersion):
+async def test_input_exception(HaVersion) -> None:
     """Test input exception."""
     with pytest.raises(HaVersionInputException):
         HaVersion(source=HaVersionSource.SUPERVISOR)
 
 
 @pytest.mark.asyncio
-async def test_etag(aresponses):
+async def test_etag(aresponses) -> None:
     """Test hassio etag."""
     aresponses.add(
         "version.home-assistant.io",

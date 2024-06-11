@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
 from .consts import DEFAULT_HEADERS, HaVersionChannel
 from .exceptions import HaVersionFetchException
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assistant/tags"
 
@@ -34,11 +36,11 @@ class HaVersionContainer(HaVersionBase):
             self.parse(data)
         except KeyError as exception:
             raise HaVersionFetchException(
-                "Could not handle response from Docker Hub"
+                "Could not handle response from Docker Hub",
             ) from exception
 
         if not self.version and (next_url := data.get("next")):
-            return await self.fetch(**{"url": next_url})
+            return await self.fetch(url=next_url)
 
         return data
 

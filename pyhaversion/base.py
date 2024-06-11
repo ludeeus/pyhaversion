@@ -1,10 +1,11 @@
+"""HaVersion base class."""
+
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-import aiohttp
 from awesomeversion import AwesomeVersion
 
 from .consts import (
@@ -15,6 +16,9 @@ from .consts import (
     HaVersionSource,
 )
 from .exceptions import HaVersionInputException
+
+if TYPE_CHECKING:
+    import aiohttp
 
 
 @dataclass(kw_only=True)
@@ -37,6 +41,7 @@ class HaVersionBase(ABC):
     _version_data: dict[str, Any] = field(repr=False, default_factory=dict)
 
     def __post_init__(self) -> None:
+        """Initialize the client."""
         self.validate_input()
 
     @property

@@ -12,7 +12,7 @@ from .const import STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_local():
+async def test_local() -> None:
     """Test ha.io/version.json stable."""
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.LOCAL)

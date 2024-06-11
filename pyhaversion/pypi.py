@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 from awesomeversion import AwesomeVersion
@@ -19,6 +18,9 @@ from .consts import (
     HaVersionChannel,
 )
 from .exceptions import HaVersionNotModifiedException
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 URL = "https://pypi.org/pypi/homeassistant/json"
 
@@ -58,5 +60,5 @@ class HaVersionPypi(HaVersionBase):
             sorted(
                 [version for version in data.get(DATA_RELEASES, []) if version.startswith("2")],
                 reverse=True,
-            )[0]
+            )[0],
         )

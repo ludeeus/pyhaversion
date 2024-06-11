@@ -18,6 +18,7 @@ class HaVersionLocal(HaVersionBase):
     """HaVersionLocal class."""
 
     def __post_init__(self) -> None:
+        """Initialize the local version."""
         self._version = localversion
         self._version_data = {}
         super().__post_init__()

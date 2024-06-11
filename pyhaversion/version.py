@@ -4,12 +4,10 @@ from __future__ import annotations
 
 import asyncio
 from socket import gaierror
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from aiohttp import ClientError, ClientSession
-from awesomeversion import AwesomeVersion
 
-from .base import HaVersionBase
 from .consts import (
     DEFAULT_BOARD,
     DEFAULT_TIMEOUT,
@@ -23,6 +21,11 @@ from .haio import HaVersionHaio
 from .local import HaVersionLocal
 from .pypi import HaVersionPypi
 from .supervisor import HaVersionSupervisor
+
+if TYPE_CHECKING:
+    from awesomeversion import AwesomeVersion
+
+    from .base import HaVersionBase
 
 _HANDLERS = {
     HaVersionSource.CONTAINER: HaVersionContainer,
@@ -92,19 +95,19 @@ class HaVersion:
         except asyncio.TimeoutError as exception:
             raise HaVersionFetchException(
                 f"Timeout of {self._handler.timeout} seconds was "
-                f"reached while fetching version for {self.source}"
+                f"reached while fetching version for {self.source}",
             ) from exception
 
         except (ClientError, gaierror) as exception:
             raise HaVersionFetchException(
-                f"Error fetching version information from {self.source} {exception}"
+                f"Error fetching version information from {self.source} {exception}",
             ) from exception
 
         try:
             self._handler.parse(data)
         except (KeyError, TypeError, AttributeError) as exception:
             raise HaVersionParseException(
-                f"Error parsing version information for {self.source} - {exception}"
+                f"Error parsing version information for {self.source} - {exception}",
             ) from exception
 
         LOGGER.debug("Version: %s", self.version)

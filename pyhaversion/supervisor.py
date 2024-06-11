@@ -3,9 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 
@@ -28,6 +27,9 @@ from .consts import (
     LOGGER,
 )
 from .exceptions import HaVersionNotModifiedException
+
+if TYPE_CHECKING:
+    from aiohttp import ClientSession
 
 URL = "https://version.home-assistant.io/{channel}.json"
 
