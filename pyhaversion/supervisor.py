@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 
@@ -35,13 +36,15 @@ URL = "https://version.home-assistant.io/{channel}.json"
 class HaVersionSupervisor(HaVersionBase):
     """Handle versions for the Supervisor source."""
 
+    session: ClientSession
+
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""
         super().validate_input()
         if self.image is None:
             self.image = DEFAULT_IMAGE
 
-    async def fetch(self, **kwargs) -> dict[str, Any]:
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -57,7 +60,8 @@ class HaVersionSupervisor(HaVersionBase):
         if request.status == 304:
             raise HaVersionNotModifiedException
 
-        return await request.json()
+        data: dict[str, Any] = await request.json()
+        return data
 
     def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""

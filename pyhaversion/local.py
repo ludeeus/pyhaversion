@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from .base import HaVersionBase
 
@@ -16,14 +17,16 @@ except (ModuleNotFoundError, ImportError):
 class HaVersionLocal(HaVersionBase):
     """HaVersionLocal class."""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self._version = localversion
+        self._version_data = {}
         super().__post_init__()
 
     def validate_input(self) -> None:
         """Raise HaVersionInputException if expected input are missing."""
 
-    @property
-    def version_data(self) -> None:
-        """Return extended version data."""
-        return {}
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:  # type: ignore[empty-body]
+        """Logic to fetch new version data."""
+
+    def parse(self, data: dict[str, Any]) -> None:
+        """Logic to parse new version data."""

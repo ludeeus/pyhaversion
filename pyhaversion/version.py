@@ -24,7 +24,7 @@ from .local import HaVersionLocal
 from .pypi import HaVersionPypi
 from .supervisor import HaVersionSupervisor
 
-_HANDLERS: dict[HaVersionSource, HaVersionBase] = {
+_HANDLERS = {
     HaVersionSource.CONTAINER: HaVersionContainer,
     HaVersionSource.PYPI: HaVersionPypi,
     HaVersionSource.SUPERVISOR: HaVersionSupervisor,
@@ -45,7 +45,7 @@ class HaVersion:
         board: str = DEFAULT_BOARD,
         image: str | None = None,
         timeout: int = DEFAULT_TIMEOUT,
-    ):
+    ) -> None:
         """Initialize the client."""
         self._handler: HaVersionBase = _HANDLERS[source](
             board=board,
@@ -72,7 +72,7 @@ class HaVersion:
         return self._handler.version
 
     @property
-    def version_data(self) -> dict[str, Any]:
+    def version_data(self) -> dict[str, Any] | None:
         """Return extended version data for supported sources."""
         return self._handler.version_data
 
@@ -80,7 +80,7 @@ class HaVersion:
         self,
         *,
         etag: str | None = None,
-    ) -> tuple[AwesomeVersion, dict[str, Any]]:
+    ) -> tuple[AwesomeVersion | None, dict[str, Any] | None]:
         """
         Get version update.
 

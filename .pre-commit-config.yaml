@@ -21,6 +21,13 @@ repos:
         language: system
         types: [python]
         entry: poetry run check-ast
+      - id: mypy
+        name: Static type checking using mypy
+        language: system
+        types: [python]
+        pass_filenames: false
+        entry: poetry run mypy pyhaversion
+        require_serial: true
       - id: check-case-conflict
         name: Check for case conflicts
         language: system

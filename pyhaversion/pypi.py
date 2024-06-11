@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
+from aiohttp import ClientSession
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
 from awesomeversion import AwesomeVersion
@@ -26,7 +27,9 @@ URL = "https://pypi.org/pypi/homeassistant/json"
 class HaVersionPypi(HaVersionBase):
     """Handle versions for the PyPi source."""
 
-    async def fetch(self, **kwargs) -> dict[str, Any]:
+    session: ClientSession
+
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -42,7 +45,8 @@ class HaVersionPypi(HaVersionBase):
         if request.status == 304:
             raise HaVersionNotModifiedException
 
-        return await request.json()
+        data: dict[str, Any] = await request.json()
+        return data
 
     def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""

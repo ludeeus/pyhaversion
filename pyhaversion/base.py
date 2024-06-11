@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -16,8 +17,8 @@ from .consts import (
 from .exceptions import HaVersionInputException
 
 
-@dataclass
-class HaVersionBase:
+@dataclass(kw_only=True)
+class HaVersionBase(ABC):
     """HaVersion base class."""
 
     source: HaVersionSource = HaVersionSource.DEFAULT
@@ -35,7 +36,7 @@ class HaVersionBase:
     _version: AwesomeVersion | None = field(repr=False, default=None)
     _version_data: dict[str, Any] = field(repr=False, default_factory=dict)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.validate_input()
 
     @property
@@ -62,8 +63,10 @@ class HaVersionBase:
         if self.session is None:
             raise HaVersionInputException("Missing aiohttp.ClientSession")
 
-    async def fetch(self, **kwargs) -> dict[str, Any]:
+    @abstractmethod
+    async def fetch(self, **kwargs: Any) -> dict[str, Any]:
         """Logic to fetch new version data."""
 
+    @abstractmethod
     def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""
