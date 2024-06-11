@@ -36,8 +36,8 @@ async def test_stable_version(aresponses):
 async def test_beta_version(HaVersion):
     """Test hassio beta."""
     with patch(
-        "pyhaversion.supervisor.HaVersionSupervisor.data",
-        fixture("supervisor/default"),
+        "pyhaversion.supervisor.HaVersionSupervisor.fetch",
+        return_value=fixture("supervisor/default"),
     ):
         async with aiohttp.ClientSession() as session:
             haversion = HaVersion(

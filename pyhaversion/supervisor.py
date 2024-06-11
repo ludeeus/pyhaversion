@@ -1,6 +1,9 @@
 """pyhaversion package."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
+from typing import Any
 
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
@@ -36,9 +39,9 @@ class HaVersionSupervisor(HaVersionBase):
         """Raise HaVersionInputException if expected input are missing."""
         super().validate_input()
         if self.image is None:
-            self.image = "default"
+            self.image = DEFAULT_IMAGE
 
-    async def fetch(self, **kwargs):
+    async def fetch(self, **kwargs) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -54,25 +57,25 @@ class HaVersionSupervisor(HaVersionBase):
         if request.status == 304:
             raise HaVersionNotModifiedException
 
-        self._data = await request.json()
+        return await request.json()
 
-    def parse(self):
+    def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""
-        if self.image != DEFAULT_IMAGE and self.image not in self.data.get(DATA_HOMEASSISTANT, {}):
+        if self.image != DEFAULT_IMAGE and self.image not in data.get(DATA_HOMEASSISTANT, {}):
             LOGGER.warning("Image '%s' not found, using default '%s'", self.image, DEFAULT_IMAGE)
             self.image = DEFAULT_IMAGE
-        self._version = self.data.get(DATA_HOMEASSISTANT, {}).get(self.image)
-        if self.board != DEFAULT_BOARD and self.board not in self.data.get(DATA_HASSOS, {}):
+        self._version = data.get(DATA_HOMEASSISTANT, {}).get(self.image)
+        if self.board != DEFAULT_BOARD and self.board not in data.get(DATA_HASSOS, {}):
             LOGGER.warning("Board '%s' not found, using default '%s'", self.board, DEFAULT_BOARD)
             self.board = DEFAULT_BOARD
         self._version_data = {
-            DATA_AUDIO: self.data.get(DATA_AUDIO),
+            DATA_AUDIO: data.get(DATA_AUDIO),
             DATA_BOARD: self.board,
-            DATA_CLI: self.data.get(DATA_CLI),
-            DATA_DNS: self.data.get(DATA_DNS),
-            DATA_OS: self.data.get(DATA_HASSOS, {}).get(self.board),
+            DATA_CLI: data.get(DATA_CLI),
+            DATA_DNS: data.get(DATA_DNS),
+            DATA_OS: data.get(DATA_HASSOS, {}).get(self.board),
             DATA_IMAGE: self.image,
-            DATA_MULTICAST: self.data.get(DATA_MULTICAST),
-            DATA_OBSERVER: self.data.get(DATA_OBSERVER),
-            DATA_SUPERVISOR: self.data.get(DATA_SUPERVISOR),
+            DATA_MULTICAST: data.get(DATA_MULTICAST),
+            DATA_OBSERVER: data.get(DATA_OBSERVER),
+            DATA_SUPERVISOR: data.get(DATA_SUPERVISOR),
         }

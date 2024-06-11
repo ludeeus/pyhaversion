@@ -87,7 +87,7 @@ class HaVersion:
         Returns a tupe with version, version_data.
         """
         try:
-            await self._handler.fetch(etag=etag)
+            data = await self._handler.fetch(etag=etag)
 
         except asyncio.TimeoutError as exception:
             raise HaVersionFetchException(
@@ -101,7 +101,7 @@ class HaVersion:
             ) from exception
 
         try:
-            self._handler.parse()
+            self._handler.parse(data)
         except (KeyError, TypeError, AttributeError) as exception:
             raise HaVersionParseException(
                 f"Error parsing version information for {self.source} - {exception}"

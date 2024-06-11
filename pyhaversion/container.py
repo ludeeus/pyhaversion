@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from typing import Any
 
 from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
@@ -18,28 +19,30 @@ URL = "https://registry.hub.docker.com/v2/repositories/homeassistant/home-assist
 class HaVersionContainer(HaVersionBase):
     """Handle versions for the Container source."""
 
-    async def fetch(self, **kwargs):
+    async def fetch(self, **kwargs) -> dict[str, Any]:
         """Logic to fetch new version data."""
         request = await self.session.get(
             url=kwargs.get("url", URL),
             headers=DEFAULT_HEADERS,
             timeout=ClientTimeout(total=self.timeout),
         )
-        self._data = await request.json()
+        data = await request.json()
         try:
-            self.parse()
+            self.parse(data)
         except KeyError as exception:
             raise HaVersionFetchException(
                 "Could not handle response from Docker Hub"
             ) from exception
-        if not self.version and (next_url := self.data.get("next")):
-            await self.fetch(**{"url": next_url})
 
-    def parse(self):
+        if not self.version and (next_url := data.get("next")):
+            return await self.fetch(**{"url": next_url})
+
+        return data
+
+    def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""
-        for image in self.data["results"]:
-            version = image["name"]
-            if not version.startswith("2"):
+        for image in data["results"]:
+            if not (version := image["name"]).startswith("2"):
                 continue
             if not len(version.split(".")) >= 3:
                 continue

@@ -1,7 +1,10 @@
 """pyhaversion package."""
 
+from __future__ import annotations
+
 from dataclasses import dataclass
 from json import JSONDecodeError
+from typing import Any
 
 from aiohttp.client import ClientTimeout
 from aiohttp.hdrs import IF_NONE_MATCH
@@ -24,7 +27,7 @@ URL = "https://www.home-assistant.io/version.json"
 class HaVersionHaio(HaVersionBase):
     """Handle versions for the home-assistant.io source."""
 
-    async def fetch(self, **kwargs):
+    async def fetch(self, **kwargs) -> dict[str, Any]:
         """Logic to fetch new version data."""
         headers = DEFAULT_HEADERS
         if (etag := kwargs.get("etag")) is not None:
@@ -41,18 +44,18 @@ class HaVersionHaio(HaVersionBase):
             raise HaVersionNotModifiedException
 
         try:
-            self._data = await request.json()
+            return await request.json()
         except JSONDecodeError as exception:
             raise HaVersionFetchException(
                 f"Could not parse JSON from response - {exception}"
             ) from exception
 
-    def parse(self):
+    def parse(self, data: dict[str, Any]) -> None:
         """Logic to parse new version data."""
-        self._version = self.data.get(DATA_CURRENT_VERSION)
+        self._version = data.get(DATA_CURRENT_VERSION)
         self._version_data = {
-            DATA_RELEASE_DATE: self.data.get(DATA_RELEASE_DATE),
-            DATA_RELEASE_NOTES: self.data.get(DATA_RELEASE_NOTES),
-            DATA_RELEASE_TITLE: self.data.get(DATA_RELEASE_TITLE),
-            DATA_RELEASE_DESCRIPTION: self.data.get(DATA_RELEASE_DESCRIPTION),
+            DATA_RELEASE_DATE: data.get(DATA_RELEASE_DATE),
+            DATA_RELEASE_NOTES: data.get(DATA_RELEASE_NOTES),
+            DATA_RELEASE_TITLE: data.get(DATA_RELEASE_TITLE),
+            DATA_RELEASE_DESCRIPTION: data.get(DATA_RELEASE_DESCRIPTION),
         }

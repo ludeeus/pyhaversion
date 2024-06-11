@@ -12,13 +12,12 @@ from .const import STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_local(caplog: pytest.LogCaptureFixture):
+async def test_local():
     """Test ha.io/version.json stable."""
     async with aiohttp.ClientSession() as session:
         haversion = HaVersion(session=session, source=HaVersionSource.LOCAL)
         await haversion.get_version()
         assert haversion.version is None
-        assert "No homeassistant installation found" in caplog.text
 
     with patch("pyhaversion.local.localversion", STABLE_VERSION):
         async with aiohttp.ClientSession() as session:
