@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import aiohttp
 import pytest
+from aresponses import ResponsesMockServer
 
 from pyhaversion import (
     HaVersion,
@@ -18,14 +19,14 @@ from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_stable_version(aresponses) -> None:
+async def test_stable_version(aresponses: ResponsesMockServer) -> None:
     """Test hassio stable."""
     aresponses.add(
         "version.home-assistant.io",
         "/stable.json",
         "get",
         aresponses.Response(
-            text=fixture("supervisor/default", False),
+            text=fixture("supervisor/default", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -37,7 +38,7 @@ async def test_stable_version(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version(HaVersion) -> None:
+async def test_beta_version(HaVersion: HaVersion) -> None:
     """Test hassio beta."""
     with patch(
         "pyhaversion.supervisor.HaVersionSupervisor.fetch",
@@ -56,21 +57,21 @@ async def test_beta_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_input_exception(HaVersion) -> None:
+async def test_input_exception(HaVersion: HaVersion) -> None:
     """Test input exception."""
     with pytest.raises(HaVersionInputException):
         HaVersion(source=HaVersionSource.SUPERVISOR)
 
 
 @pytest.mark.asyncio
-async def test_etag(aresponses) -> None:
+async def test_etag(aresponses: ResponsesMockServer) -> None:
     """Test hassio etag."""
     aresponses.add(
         "version.home-assistant.io",
         "/stable.json",
         "get",
         aresponses.Response(
-            text=fixture("supervisor/default", False),
+            text=fixture("supervisor/default", asjson=False),
             status=200,
             headers={**HEADERS, "Etag": "test"},
         ),

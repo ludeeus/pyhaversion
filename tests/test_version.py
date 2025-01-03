@@ -5,8 +5,8 @@ from socket import gaierror
 from typing import NoReturn
 from unittest.mock import patch
 
-from aiohttp import ClientError
 import pytest
+from aiohttp import ClientError
 
 from pyhaversion import (
     HaVersion,
@@ -20,11 +20,11 @@ from pyhaversion import (
 async def test_timeout_exception() -> None:
     """Test timeout exception."""
 
-    async def mocked_fetch_TimeoutError(*_, **__) -> NoReturn:
+    async def mocked_fetch_timeouterror(*_, **__) -> NoReturn:
         """Mocked."""
         raise asyncio.TimeoutError
 
-    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_TimeoutError):
+    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_timeouterror):
         haversion = HaVersion()
         with pytest.raises(HaVersionFetchException):
             await haversion.get_version()
@@ -39,17 +39,21 @@ async def test_fetch_exception() -> None:
         """Mocked."""
         raise gaierror
 
-    async def mocked_fetch_ClientError(*_, **__) -> NoReturn:
+    async def mocked_fetch_clienterror(*_, **__) -> NoReturn:
         """Mocked."""
         raise ClientError
 
-    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_gaierror):
-        with pytest.raises(HaVersionFetchException):
-            await haversion.get_version()
+    with (
+        patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_gaierror),
+        pytest.raises(HaVersionFetchException),
+    ):
+        await haversion.get_version()
 
-    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_ClientError):
-        with pytest.raises(HaVersionFetchException):
-            await haversion.get_version()
+    with (
+        patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch_clienterror),
+        pytest.raises(HaVersionFetchException),
+    ):
+        await haversion.get_version()
 
 
 @pytest.mark.asyncio
@@ -60,22 +64,27 @@ async def test_parse_exception() -> None:
     async def mocked_fetch(*_, **__) -> None:
         """Mocked."""
 
-    def mocked_parse_KeyError(*_) -> NoReturn:
+    def mocked_parse_keyerror(*_) -> NoReturn:
         """Mocked."""
         raise KeyError
 
-    def mocked_parse_TypeError(*_) -> NoReturn:
+    def mocked_parse_typeerror(*_) -> NoReturn:
         """Mocked."""
         raise TypeError
 
-    with patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch):
-        with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_KeyError):
-            with pytest.raises(HaVersionParseException):
-                await haversion.get_version()
+    with (
+        patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch),
+        patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_keyerror),
+        pytest.raises(HaVersionParseException),
+    ):
+        await haversion.get_version()
 
-        with patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_TypeError):
-            with pytest.raises(HaVersionParseException):
-                await haversion.get_version()
+    with (
+        patch("pyhaversion.local.HaVersionLocal.fetch", mocked_fetch),
+        patch("pyhaversion.local.HaVersionLocal.parse", mocked_parse_typeerror),
+        pytest.raises(HaVersionParseException),
+    ):
+        await haversion.get_version()
 
 
 @pytest.mark.asyncio

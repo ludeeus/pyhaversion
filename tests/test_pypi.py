@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import aiohttp
 import pytest
+from aresponses import ResponsesMockServer
 
 from pyhaversion import (
     HaVersion,
@@ -18,7 +19,7 @@ from .const import BETA_VERSION, HEADERS, STABLE_VERSION, STABLE_VERSION_BETA_WE
 
 
 @pytest.mark.asyncio
-async def test_stable_version(HaVersion) -> None:
+async def test_stable_version(HaVersion: HaVersion) -> None:
     """Test pypi stable."""
     with patch(
         "pyhaversion.pypi.HaVersionPypi.fetch",
@@ -35,7 +36,7 @@ async def test_stable_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version(HaVersion) -> None:
+async def test_beta_version(HaVersion: HaVersion) -> None:
     """Test pypi beta."""
     with patch(
         "pyhaversion.pypi.HaVersionPypi.fetch",
@@ -52,14 +53,14 @@ async def test_beta_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_stable_version_beta_week(aresponses) -> None:
+async def test_stable_version_beta_week(aresponses: ResponsesMockServer) -> None:
     """Test pypi stable during beta week."""
     aresponses.add(
         "pypi.org",
         "/pypi/homeassistant/json",
         "get",
         aresponses.Response(
-            text=fixture("pypi/beta", False),
+            text=fixture("pypi/beta", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -74,20 +75,21 @@ async def test_stable_version_beta_week(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_input_exception(HaVersion) -> None:
+async def test_input_exception(HaVersion: HaVersion) -> None:
+    """Test input exception."""
     with pytest.raises(HaVersionInputException):
         HaVersion(source=HaVersionSource.PYPI)
 
 
 @pytest.mark.asyncio
-async def test_etag(aresponses) -> None:
+async def test_etag(aresponses: ResponsesMockServer) -> None:
     """Test pypi etag."""
     aresponses.add(
         "pypi.org",
         "/pypi/homeassistant/json",
         "get",
         aresponses.Response(
-            text=fixture("pypi/default", False),
+            text=fixture("pypi/default", asjson=False),
             status=200,
             headers={**HEADERS, "etag": "test"},
         ),
