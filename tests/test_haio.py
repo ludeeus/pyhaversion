@@ -2,6 +2,7 @@
 
 import aiohttp
 import pytest
+from aresponses import ResponsesMockServer
 
 from pyhaversion import HaVersion, HaVersionNotModifiedException, HaVersionSource
 from pyhaversion.exceptions import HaVersionFetchException
@@ -11,14 +12,14 @@ from .const import HEADERS, STABLE_VERSION
 
 
 @pytest.mark.asyncio
-async def test_haio(aresponses) -> None:
+async def test_haio(aresponses: ResponsesMockServer) -> None:
     """Test ha.io/version.json stable."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",
         "get",
         aresponses.Response(
-            text=fixture("haio/default", False),
+            text=fixture("haio/default", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -30,14 +31,14 @@ async def test_haio(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_etag(aresponses) -> None:
+async def test_etag(aresponses: ResponsesMockServer) -> None:
     """Test haio etag."""
     aresponses.add(
         "www.home-assistant.io",
         "/version.json",
         "get",
         aresponses.Response(
-            text=fixture("haio/default", False),
+            text=fixture("haio/default", asjson=False),
             status=200,
             headers={**HEADERS, "Etag": "test"},
         ),
@@ -58,7 +59,7 @@ async def test_etag(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_bad_json(aresponses) -> None:
+async def test_bad_json(aresponses: ResponsesMockServer) -> None:
     """Test bad JSON."""
     aresponses.add(
         "www.home-assistant.io",

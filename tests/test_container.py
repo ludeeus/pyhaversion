@@ -4,6 +4,7 @@ from unittest.mock import patch
 
 import aiohttp
 import pytest
+from aresponses import ResponsesMockServer
 
 from pyhaversion import HaVersion, HaVersionException
 from pyhaversion.consts import HaVersionChannel, HaVersionSource
@@ -20,7 +21,7 @@ from .const import (
 
 
 @pytest.mark.asyncio
-async def test_stable_version(HaVersion) -> None:
+async def test_stable_version(HaVersion: HaVersion) -> None:
     """Test container stable."""
     with patch(
         "pyhaversion.container.HaVersionContainer.fetch",
@@ -33,7 +34,7 @@ async def test_stable_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version(HaVersion) -> None:
+async def test_beta_version(HaVersion: HaVersion) -> None:
     """Test container beta."""
     with patch(
         "pyhaversion.container.HaVersionContainer.fetch",
@@ -50,7 +51,7 @@ async def test_beta_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_dev_version(HaVersion) -> None:
+async def test_dev_version(HaVersion: HaVersion) -> None:
     """Test container dev."""
     with patch(
         "pyhaversion.container.HaVersionContainer.fetch",
@@ -67,7 +68,7 @@ async def test_dev_version(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_stable_version_beta_week(HaVersion) -> None:
+async def test_stable_version_beta_week(HaVersion: HaVersion) -> None:
     """Test container stable during beta week."""
     with patch(
         "pyhaversion.container.HaVersionContainer.fetch",
@@ -83,7 +84,7 @@ async def test_stable_version_beta_week(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version_beta_week(HaVersion) -> None:
+async def test_beta_version_beta_week(HaVersion: HaVersion) -> None:
     """Test container beta during beta week."""
     with patch(
         "pyhaversion.container.HaVersionContainer.fetch",
@@ -100,14 +101,14 @@ async def test_beta_version_beta_week(HaVersion) -> None:
 
 
 @pytest.mark.asyncio
-async def test_stable_version_pagination(aresponses) -> None:
+async def test_stable_version_pagination(aresponses: ResponsesMockServer) -> None:
     """Test container beta during beta week."""
     aresponses.add(
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
         aresponses.Response(
-            text=fixture("container/page1", False),
+            text=fixture("container/page1", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -117,7 +118,7 @@ async def test_stable_version_pagination(aresponses) -> None:
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
         aresponses.Response(
-            text=fixture("container/page2", False),
+            text=fixture("container/page2", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -132,14 +133,14 @@ async def test_stable_version_pagination(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version_pagination(aresponses) -> None:
+async def test_beta_version_pagination(aresponses: ResponsesMockServer) -> None:
     """Test container beta during beta week."""
     aresponses.add(
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page1", False),
+            text=fixture("container/beta_week_page1", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -149,7 +150,7 @@ async def test_beta_version_pagination(aresponses) -> None:
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page2", False),
+            text=fixture("container/beta_week_page2", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -165,14 +166,14 @@ async def test_beta_version_pagination(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_stable_version_beta_week_pagination(aresponses) -> None:
+async def test_stable_version_beta_week_pagination(aresponses: ResponsesMockServer) -> None:
     """Test container beta during beta week."""
     aresponses.add(
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page1", False),
+            text=fixture("container/beta_week_page1", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -182,7 +183,7 @@ async def test_stable_version_beta_week_pagination(aresponses) -> None:
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page2", False),
+            text=fixture("container/beta_week_page2", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -198,14 +199,14 @@ async def test_stable_version_beta_week_pagination(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_beta_version_beta_week_pagination(aresponses) -> None:
+async def test_beta_version_beta_week_pagination(aresponses: ResponsesMockServer) -> None:
     """Test container beta during beta week."""
     aresponses.add(
         "registry.hub.docker.com",
         "/v2/repositories/homeassistant/home-assistant/tags",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page1", False),
+            text=fixture("container/beta_week_page1", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -215,7 +216,7 @@ async def test_beta_version_beta_week_pagination(aresponses) -> None:
         "/v2/repositories/homeassistant/home-assistant/tags/page2",
         "get",
         aresponses.Response(
-            text=fixture("container/beta_week_page2", False),
+            text=fixture("container/beta_week_page2", asjson=False),
             status=200,
             headers=HEADERS,
         ),
@@ -232,7 +233,7 @@ async def test_beta_version_beta_week_pagination(aresponses) -> None:
 
 
 @pytest.mark.asyncio
-async def test_keyerror(aresponses) -> None:
+async def test_keyerror(aresponses: ResponsesMockServer) -> None:
     """Test container KeyError."""
     aresponses.add(
         "registry.hub.docker.com",
@@ -253,10 +254,10 @@ async def test_keyerror(aresponses) -> None:
         )
         with pytest.raises(HaVersionException):
             await haversion.get_version()
-            assert haversion.version is None
+        assert haversion.version is None
 
         haversion._handler._version = "1.2.3"
 
         with pytest.raises(HaVersionException):
             await haversion.get_version()
-            assert haversion.version == "1.2.3"
+        assert haversion.version == "1.2.3"

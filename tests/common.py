@@ -1,11 +1,14 @@
+"""Common test utilities."""
+
+from __future__ import annotations
+
 import json
-import os
+from pathlib import Path
 
 
-def fixture(filename, asjson=True):
+def fixture(filename: str, asjson: bool = True) -> str | dict:
     """Load a fixture."""
-    path = os.path.join(os.path.dirname(__file__), "fixtures", f"{filename}.json")
-    with open(path, encoding="utf-8") as fptr:
-        if asjson:
-            return json.loads(fptr.read())
-        return fptr.read()
+    path = Path(Path(__file__).parent, "fixtures", f"{filename}.json")
+    with path.open(encoding="utf-8") as fptr:
+        content = fptr.read()
+        return json.loads(content) if asjson else content

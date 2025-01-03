@@ -57,7 +57,7 @@ awesomeversion = ">21"
 [tool.poetry.dev-dependencies]
 aresponses = "^3"
 awesomeversion = ">21"
-ruff = "0.6.8"
+ruff = "0.8.5"
 mypy = "1.14.1"
 pre-commit = "4.0.1"
 pre-commit-hooks = "5.0.0"
@@ -89,16 +89,25 @@ line-length = 100
 
 [tool.ruff.lint]
 ignore = [
-  "ANN101",
+  "ANN002",
+  "ANN003",
   "ANN401",
   "D203",
   "D212",
+  "D401",
   "EM101",
   "EM102",
+  "FBT001",
+  "FBT002",
+  "N802",
+  "N803",
   "N818",
   "PLR0913",
   "PLR2004",
+  "S101",
+  "SLF001",
   "TRY003",
+  "T201",
 ]
 
 select = ["ALL"]

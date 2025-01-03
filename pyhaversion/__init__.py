@@ -13,10 +13,10 @@ from .version import HaVersion
 __all__ = [
     "HaVersion",
     "HaVersionChannel",
-    "HaVersionSource",
     "HaVersionException",
     "HaVersionFetchException",
     "HaVersionInputException",
     "HaVersionNotModifiedException",
     "HaVersionParseException",
+    "HaVersionSource",
 ]
