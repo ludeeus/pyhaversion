@@ -11,10 +11,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.2.2
+      - name: Checkout the repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38 # v5.4.0
         with:
           python-version: "3.12"
 
@@ -28,7 +29,7 @@ jobs:
         run: poetry build
 
       - name: Upload dists
-        uses: actions/upload-artifact@v4.6.1
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: "dist"
           path: "dist/"
@@ -47,7 +48,7 @@ jobs:
       id-token: write
     steps:
       - name: Download dists
-        uses: actions/download-artifact@v4.1.9
+        uses: actions/download-artifact@cc203385981b70ca67e1cc392babf9cc229d5806 # v4.1.9
         with:
           name: "dist"
           path: "dist/"
