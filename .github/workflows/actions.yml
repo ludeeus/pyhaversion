@@ -38,6 +38,7 @@ jobs:
         entry:
           - version: "3.12"
             minimum: true
+          - version: "3.13"
     steps:
       - name: 📥 Checkout the repository
         uses: actions/checkout@v4.2.2
