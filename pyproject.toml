@@ -57,7 +57,7 @@ awesomeversion = ">21"
 [tool.poetry.dev-dependencies]
 aresponses = "^3"
 awesomeversion = ">21"
-ruff = "0.14.8"
+ruff = "0.14.9"
 mypy = "1.19.1"
 pre-commit = "4.5.1"
 pre-commit-hooks = "6.0.0"
