@@ -1,6 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ]
+  "extends": ["config:best-practices"],
+  "minimumReleaseAge": "2 days",
+  "ignoreDeps": [
+    "mcr.microsoft.com/vscode/devcontainers/base"
+  ],
+  "osvVulnerabilityAlerts": true,
+  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "labels": [
+    "dependencies"
+  ],
+  "prConcurrentLimit": 10
 }
