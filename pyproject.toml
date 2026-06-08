@@ -55,8 +55,8 @@ aiohttp = "^3.6"
 awesomeversion = ">21"
 
 [tool.poetry.dev-dependencies]
-aresponses = "^3"
-awesomeversion = ">21"
+aresponses = "3.0.0"
+awesomeversion = "==25.8.0"
 ruff = "0.14.14"
 mypy = "1.19.1"
 pre-commit = "4.5.1"
