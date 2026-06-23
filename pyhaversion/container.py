@@ -9,7 +9,7 @@ from aiohttp.client import ClientTimeout
 from awesomeversion import AwesomeVersion
 
 from .base import HaVersionBase
-from .consts import DEFAULT_HEADERS, HaVersionChannel
+from .consts import DATA_RELEASE_DATE, DEFAULT_HEADERS, HaVersionChannel
 from .exceptions import HaVersionFetchException
 
 if TYPE_CHECKING:
@@ -54,13 +54,15 @@ class HaVersionContainer(HaVersionBase):
 
             version = AwesomeVersion(version)
             if version.dev:
-                if self.channel == HaVersionChannel.DEV:
-                    self._version = version
-                    break
+                matches_channel = self.channel == HaVersionChannel.DEV
             elif version.beta:
-                if self.channel == HaVersionChannel.BETA:
-                    self._version = version
-                    break
+                matches_channel = self.channel == HaVersionChannel.BETA
             else:
-                self._version = version
-                break
+                matches_channel = True
+
+            if not matches_channel:
+                continue
+
+            self._version = version
+            self._version_data = {DATA_RELEASE_DATE: image.get("tag_last_pushed")}
+            break

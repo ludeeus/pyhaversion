@@ -13,7 +13,8 @@
             "name": "beta"
         },
         {
-            "name": "2020.99.9b0"
+            "name": "2020.99.9b0",
+            "tag_last_pushed": "2020-12-08T16:42:00Z"
         },
         {
             "name": "rc"
