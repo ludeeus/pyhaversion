@@ -7,14 +7,17 @@ import pytest
 from aresponses import ResponsesMockServer
 
 from pyhaversion import HaVersion, HaVersionException
-from pyhaversion.consts import HaVersionChannel, HaVersionSource
+from pyhaversion.consts import DATA_RELEASE_DATE, HaVersionChannel, HaVersionSource
 from tests.common import fixture
 
 from .const import (
+    BETA_RELEASE_DATE,
     BETA_VERSION,
     BETA_VERSION_BETA_WEEK,
+    DEV_RELEASE_DATE,
     DEV_VERSION,
     HEADERS,
+    STABLE_RELEASE_DATE,
     STABLE_VERSION,
     STABLE_VERSION_BETA_WEEK,
 )
@@ -261,3 +264,53 @@ async def test_keyerror(aresponses: ResponsesMockServer) -> None:
         with pytest.raises(HaVersionException):
             await haversion.get_version()
         assert haversion.version == "1.2.3"
+
+
+@pytest.mark.asyncio
+async def test_stable_release_date(HaVersion: HaVersion) -> None:
+    """Test container stable release date."""
+    with patch(
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/default"),
+    ):
+        async with aiohttp.ClientSession() as session:
+            haversion = HaVersion(session=session, source=HaVersionSource.CONTAINER)
+            await haversion.get_version()
+            assert haversion.version == STABLE_VERSION
+            assert haversion.version_data[DATA_RELEASE_DATE] == STABLE_RELEASE_DATE
+
+
+@pytest.mark.asyncio
+async def test_beta_release_date(HaVersion: HaVersion) -> None:
+    """Test container beta release date."""
+    with patch(
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/beta_week"),
+    ):
+        async with aiohttp.ClientSession() as session:
+            haversion = HaVersion(
+                session=session,
+                source=HaVersionSource.CONTAINER,
+                channel=HaVersionChannel.BETA,
+            )
+            await haversion.get_version()
+            assert haversion.version == BETA_VERSION
+            assert haversion.version_data[DATA_RELEASE_DATE] == BETA_RELEASE_DATE
+
+
+@pytest.mark.asyncio
+async def test_dev_release_date(HaVersion: HaVersion) -> None:
+    """Test container dev release date."""
+    with patch(
+        "pyhaversion.container.HaVersionContainer.fetch",
+        return_value=fixture("container/default"),
+    ):
+        async with aiohttp.ClientSession() as session:
+            haversion = HaVersion(
+                session=session,
+                source=HaVersionSource.CONTAINER,
+                channel=HaVersionChannel.DEV,
+            )
+            await haversion.get_version()
+            assert haversion.version == DEV_VERSION
+            assert haversion.version_data[DATA_RELEASE_DATE] == DEV_RELEASE_DATE
