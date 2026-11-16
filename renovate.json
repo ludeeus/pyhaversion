@@ -6,7 +6,9 @@
     "mcr.microsoft.com/vscode/devcontainers/base"
   ],
   "osvVulnerabilityAlerts": true,
-  "dependencyDashboardOSVVulnerabilitySummary": "all",
+  "dependencyDashboard": {
+    "osvVulnerabilitySummary": "all"
+  },
   "labels": [
     "dependencies"
   ],
